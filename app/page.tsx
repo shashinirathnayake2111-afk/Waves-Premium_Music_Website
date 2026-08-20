@@ -111,12 +111,12 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-slate-800/60 flex items-center w-90 h-10 px-3 gap-3 text-white text-base rounded-full border border-slate-700/50 mr-auto ml-8 transition-all duration-200">
+          <div className="bg-slate-800/60 hidden lg:flex items-center w-90 h-10 px-3 gap-3 text-white text-base rounded-full border border-slate-700/50 mr-auto ml-8 transition-all duration-200">
             <GoSearch className="text-white shrink-0"/>
             <input className="h-full w-full outline-none placeholder:text-slate-400 bg-transparent" type="text" placeholder="What do you want to play?"/> 
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="hidden lg:flex gap-4 items-center">
             <Link href="/" className="bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white w-10 h-10 grid place-items-center text-2xl rounded-full border border-slate-700/50 transition-all duration-200" title="Home">
             <MdHomeFilled/>
             </Link>

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Music Website with AI & Global Music Hub By Shasihini Rathnayake",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
