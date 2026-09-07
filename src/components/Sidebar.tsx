@@ -58,6 +58,20 @@ export default function Sidebar() {
     { name: "Stressed", icon: FaSpa, color: "hover:border-purple-500/50 hover:bg-purple-500/10" },
   ];
 
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [playlistName, setPlaylistName] = useState("");
+  const [myPlaylists, setMyPlaylists] = useState<string[]>([]);
+
+  const handleCreatePlaylist = () => {
+    if (playlistName.trim()) {
+      setMyPlaylists((prev) => [...prev, playlistName.trim()]);
+      console.log("New Playlist Created:", playlistName.trim());
+
+      setPlaylistName("");
+      setIsCreateModalOpen(false);
+    }
+  };
+
   return (
     <div>
       <aside className="fixed left-2 top-15 bg-white/5 backdrop-blur-xl border border-[#091227]/10 w-90 h-[90vh] rounded-lg p-4 overflow-y-auto">
@@ -130,16 +144,55 @@ export default function Sidebar() {
 
         <div className="mt-auto mb-6 pt-4 border-t border-white/10">
           <button
-            onClick={() => {
-              console.log("Create Playlist clicked");
-            }}
-            className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
+            onClick={() => setIsCreateModalOpen(true)}
+          className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
           >
-            <span>Create Playlist</span>
-            <FaPlus className="text-sm" />
-          </button>
-        </div>
-      </aside>
+          <span>Create Playlist</span>
+          <FaPlus className="text-sm" />
+        </button>
     </div>
+      </aside >
+
+    { isCreateModalOpen && (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-slate-900 border border-white/10 p-6 rounded-2xl w-full max-w-md shadow-2xl space-y-4">
+          <h3 className="text-xl font-bold text-white">Create New Playlist</h3>
+
+          <div>
+            <label className="text-xs text-gray-400 mb-3 block">Playlist Name</label>
+            <input
+              type="text"
+              placeholder="My Awesome Playlist..."
+              value={playlistName}
+              onChange={(e) => setPlaylistName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleCreatePlaylist()}
+              className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500 transition-all text-sm"
+              autoFocus
+            />
+          </div>
+
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              onClick={() => {
+                setPlaylistName("");
+                setIsCreateModalOpen(false);
+              }}
+              className="px-4 py-2 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={handleCreatePlaylist}
+              className="px-5 py-2 rounded-xl text-sm bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/30"
+            >
+              Create
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+}
+    </div >
   );
 }
