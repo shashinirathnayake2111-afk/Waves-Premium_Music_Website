@@ -1,6 +1,6 @@
 import Link from "next/link";
 import react, { useEffect, useState } from "react";
-import { FaBroadcastTower, FaPlay } from "react-icons/fa";
+import { FaBroadcastTower, FaPlay, FaSmile, FaCloudRain, FaCoffee, FaSpa } from "react-icons/fa";
 
 export default function Sidebar() {
 
@@ -42,10 +42,17 @@ export default function Sidebar() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % vibeCards.length);
-    }, 4500); 
+    }, 4500);
 
     return () => clearInterval(timer);
   }, []);
+
+  const feelingOptions = [
+    { name: "Happy", icon: FaSmile, color: "hover:border-pink-500/50 hover:bg-pink-500/10" },
+    { name: "Sad", icon: FaCloudRain, color: "hover:border-blue-500/50 hover:bg-blue-500/10" },
+    { name: "Chill", icon: FaCoffee, color: "hover:border-emerald-500/50 hover:bg-emerald-500/10" },
+    { name: "Stressed", icon: FaSpa, color: "hover:border-purple-500/50 hover:bg-purple-500/10" },
+  ];
 
 
   return (
@@ -74,6 +81,28 @@ export default function Sidebar() {
                 <FaPlay className="text-[10px]" />
                 <span>{vibeCards[currentIndex].buttonText}</span>
               </button>
+            </div>
+          </div>
+
+          {/* Mood Selector Section */}
+          <div className="mt-6 mb-6">
+            <h3 className="font-semibold uppercase text-xs text-gray-400 tracking-wider mb-3 px-3">
+              How are you feeling?
+            </h3>
+
+            <div className="grid grid-cols-2 gap-2">
+              {feelingOptions.map((feeling, index) => {
+                const IconComponent = feeling.icon;
+                return (
+                  <button
+                    key={index}
+                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border border-white/5 bg-white/5 text-sm text-gray-300 transition-all ${feeling.color}`}
+                  >
+                    <IconComponent className="text-sm" />
+                    <span>{feeling.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
