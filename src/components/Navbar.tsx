@@ -14,7 +14,7 @@ export default function Navbar() {
         <nav className="h-15 flex justify-between items-center px-6 fixed top-0 left-0 w-full bg-[#1e2639] border-b border-slate-800 z-100">
             <div className="flex gap-6 items-center">
                 <Image src="/images/logo.png" alt="logo" width={80} height={80} className="w-13 h-10 rounded-full" />
-                <span className={`-ml-5 text-2xl font-bold bg-gradient-to-r from-blue-600 to-pink-500 bg-clip-text text-transparent uppercase ${quicksand.className}`}>Waves</span>
+                <span className={`-ml-5 text-2xl font-bold bg-linear-to-r from-blue-600 to-pink-500 bg-clip-text text-transparent uppercase ${quicksand.className}`}>Waves</span>
             </div>
 
             <div className="flex items-center gap-3">
@@ -37,7 +37,7 @@ export default function Navbar() {
                 <Link href="/Signup" className="text-slate-300 hover:text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
                     Sign up
                 </Link>
-                <Link href="/login" className="bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
+                <Link href="/login" className="bg-linear-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
                     Log in
                 </Link>
             </div>

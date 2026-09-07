@@ -58,7 +58,7 @@ export default function Sidebar() {
 
         <ul className="space-y-2 w-full">
 
-          <div className={`bg-gradient-to-r ${vibeCards[currentIndex].styles.gradient} w-full mb-8 border border-white/10 p-3.5 rounded-xl hover:from-indigo-700/30 hover:to-pink-700/30 transition px-3`}>
+          <div className={`bg-linear-to-r ${vibeCards[currentIndex].styles.gradient} w-full mb-8 border border-white/10 p-3.5 rounded-xl hover:from-indigo-700/30 hover:to-pink-700/30 transition px-4 py-3`}>
             <div className="flex flex-col gap-4 mb-2">
               <span className="text-purple-200 text-xs font-semibold uppercase tracking-wide">
                 {vibeCards[currentIndex].question}
