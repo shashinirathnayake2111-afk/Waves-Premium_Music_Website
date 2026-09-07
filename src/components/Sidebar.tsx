@@ -2,7 +2,7 @@ import Link from "next/link";
 import react, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaPlay, FaSmile, FaCloudRain, FaCoffee, FaSpa } from "react-icons/fa";
-import { FaRadio, FaPlus } from "react-icons/fa6";
+import { FaRadio, FaPlus, FaPodcast, FaUser } from "react-icons/fa6";
 
 export default function Sidebar() {
 
@@ -40,7 +40,6 @@ export default function Sidebar() {
   ];
 
   const router = useRouter();
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -61,6 +60,7 @@ export default function Sidebar() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState("");
   const [myPlaylists, setMyPlaylists] = useState<string[]>([]);
+  const [isGuest, setIsGuest] = useState(true);
 
   const handleCreatePlaylist = () => {
     if (playlistName.trim()) {
@@ -129,6 +129,7 @@ export default function Sidebar() {
               className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
             >
               <span>Radio</span>
+              <FaRadio className="text-purple-400 text-sm" />
             </button>
           </li>
 
@@ -138,6 +139,7 @@ export default function Sidebar() {
               className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium mb-6"
             >
               <span>Podcasts</span>
+              <FaPodcast className="text-pink-400 text-sm" />
             </button>
           </li>
         </ul>
@@ -145,12 +147,30 @@ export default function Sidebar() {
         <div className="mt-auto mb-6 pt-4 border-t border-white/10">
           <button
             onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
+            className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
           >
-          <span>Create Playlist</span>
-          <FaPlus className="text-sm" />
-        </button>
-    </div>
+            <span>Create Playlist</span>
+            <FaPlus className="text-sm" />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/5">
+          {isGuest ? (
+            <div className="flex items-center text-xs text-gray-400">
+              <span className="flex items-center gap-2">
+                <FaUser className="text-gray-400" /> 
+                <span>Guest User</span>
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center font-bold text-xs text-white">
+                N
+              </div>
+              <span className="text-xs font-medium text-gray-200">User Profile</span>
+            </div>
+          )}
+        </div>
       </aside >
 
     { isCreateModalOpen && (
