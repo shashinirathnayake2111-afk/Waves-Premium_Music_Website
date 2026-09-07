@@ -1,6 +1,8 @@
 import Link from "next/link";
 import react, { useEffect, useState } from "react";
-import { FaBroadcastTower, FaPlay, FaSmile, FaCloudRain, FaCoffee, FaSpa } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { FaPlay, FaSmile, FaCloudRain, FaCoffee, FaSpa } from "react-icons/fa";
+import { FaRadio, FaPlus } from "react-icons/fa6";
 
 export default function Sidebar() {
 
@@ -37,6 +39,8 @@ export default function Sidebar() {
     },
   ];
 
+  const router = useRouter();
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -53,6 +57,14 @@ export default function Sidebar() {
     { name: "Chill", icon: FaCoffee, color: "hover:border-emerald-500/50 hover:bg-emerald-500/10" },
     { name: "Stressed", icon: FaSpa, color: "hover:border-purple-500/50 hover:bg-purple-500/10" },
   ];
+
+  const handleCreatePlaylistClick = () => {
+    if (isGuest) {
+      setShowAuthModal(true);
+    } else {
+      setShowCreateModal(true);
+    }
+  };
 
 
   return (
@@ -77,7 +89,7 @@ export default function Sidebar() {
               </p>
 
               {/* Button */}
-              <button className={`flex items-center justify-center gap-2 ${vibeCards[currentIndex].styles.buttonBg} ${vibeCards[currentIndex].styles.shadow} text-white text-xs font-medium px-3 py-2 rounded-lg transition shadow-md w-full`}>
+              <button className={`flex items-center justify-center gap-2 ${vibeCards[currentIndex].styles.buttonBg} ${vibeCards[currentIndex].styles.shadow} text-white text-sm font-medium px-3 py-2 rounded-lg transition shadow-md w-full`}>
                 <FaPlay className="text-[10px]" />
                 <span>{vibeCards[currentIndex].buttonText}</span>
               </button>
@@ -107,12 +119,35 @@ export default function Sidebar() {
           </div>
 
           <li>
-            <button className="w-full flex items-center justify-between px-5 py-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
-              <span className="text-medium font-medium">Radio</span>
-              <FaBroadcastTower className="w-5 h-5 text-purple-400" />
+            <button
+              onClick={() => router.push('/radio')}
+              className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+            >
+              <span>Radio</span>
+            </button>
+          </li>
+
+          <li>
+            <button
+              onClick={() => router.push('/radio')}
+              className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium mb-6"
+            >
+              <span>Podcasts</span>
             </button>
           </li>
         </ul>
+
+        <div className="mt-auto mb-6 pt-4 border-t border-white/10">
+          <button
+            onClick={() => {
+              console.log("Create Playlist clicked");
+            }}
+            className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
+          >
+            <span>Create Playlist</span>
+            <FaPlus className="text-sm" />
+          </button>
+        </div>
       </aside>
     </div>
   );
