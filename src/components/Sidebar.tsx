@@ -58,15 +58,6 @@ export default function Sidebar() {
     { name: "Stressed", icon: FaSpa, color: "hover:border-purple-500/50 hover:bg-purple-500/10" },
   ];
 
-  const handleCreatePlaylistClick = () => {
-    if (isGuest) {
-      setShowAuthModal(true);
-    } else {
-      setShowCreateModal(true);
-    }
-  };
-
-
   return (
     <div>
       <aside className="fixed left-2 top-15 bg-white/5 backdrop-blur-xl border border-[#091227]/10 w-90 h-[90vh] rounded-lg p-4 overflow-y-auto">
