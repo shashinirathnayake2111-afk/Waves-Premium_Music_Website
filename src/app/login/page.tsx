@@ -26,12 +26,21 @@ export default function page() {
         console.log("Hurry, you can continue enjoying:", { email, password });
     };
 
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+
+        if (hour >= 5 && hour < 12) return "Ready for fresh beats?";
+        if (hour >= 12 && hour < 18) return "Need a music break?";
+        if (hour >= 18 && hour < 22) return "Time to unwind!";
+        return "Late night vibes?";
+    };
+
     return (
         <div className="min-h-screen bg-[#0b0f19] text-white flex items-center justify-center">
             <div className="w-full max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
 
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-bold mb-1">Welcome Back</h1>
+                    <h1 className="text-2xl font-bold mb-1 text-linear-r from-indigo-600 to-pink-600">{getGreeting()}</h1>
                     <p className="text-gray-400">Log in to continue listening </p>
                 </div>
 
