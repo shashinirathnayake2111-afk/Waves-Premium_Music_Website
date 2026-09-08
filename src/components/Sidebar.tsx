@@ -74,145 +74,157 @@ export default function Sidebar() {
 
   return (
     <div>
-      <aside className="fixed left-2 top-15 bg-white/5 backdrop-blur-xl border border-[#091227]/10 w-90 h-[90vh] rounded-lg p-4 overflow-y-auto">
+      <aside className="fixed left-2 top-15 w-90 h-[82vh] flex flex-col gap-3">
 
-        <h2 className="font-semibold uppercase text-sm text-gray-300 tracking-wider mb-6 mt-4 px-3">
-          Your Music Store
-        </h2>
+        <div className=" bg-white/5 backdrop-blur-xl border border-[#091227]/10 rounded-lg p-4 overflow-y-auto flex-1 flex flex-col justify-between">
 
-        <ul className="space-y-2 w-full">
+          <div>
+            <h2 className="font-semibold uppercase text-sm text-gray-300 tracking-wider mb-6 mt-4 px-3">
+              Your Music Store
+            </h2>
 
-          <div className={`bg-linear-to-r ${vibeCards[currentIndex].styles.gradient} w-full mb-8 border border-white/10 p-3.5 rounded-xl hover:from-indigo-700/30 hover:to-pink-700/30 transition px-4 py-3`}>
-            <div className="flex flex-col gap-4 mb-2">
-              <span className="text-purple-200 text-xs font-semibold uppercase tracking-wide">
-                {vibeCards[currentIndex].question}
-              </span>
+            <ul className="space-y-2 w-full">
 
-              {/* Subtitle */}
-              <p className="text-sm text-gray-300 leading-relaxed mb-2">
-                {vibeCards[currentIndex].description}
-              </p>
+              <div className={`bg-linear-to-r ${vibeCards[currentIndex].styles.gradient} w-full mb-8 border border-white/10 p-3.5 rounded-xl hover:from-indigo-700/30 hover:to-pink-700/30 transition px-4 py-3`}>
+                <div className="flex flex-col gap-4 mb-2">
+                  <span className="text-purple-200 text-xs font-semibold uppercase tracking-wide">
+                    {vibeCards[currentIndex].question}
+                  </span>
 
-              {/* Button */}
-              <button className={`flex items-center justify-center gap-2 ${vibeCards[currentIndex].styles.buttonBg} ${vibeCards[currentIndex].styles.shadow} text-white text-sm font-medium px-3 py-2 rounded-lg transition shadow-md w-full`}>
-                <FaPlay className="text-[10px]" />
-                <span>{vibeCards[currentIndex].buttonText}</span>
+                  {/* Subtitle */}
+                  <p className="text-sm text-gray-300 leading-relaxed mb-2">
+                    {vibeCards[currentIndex].description}
+                  </p>
+
+                  {/* Button */}
+                  <button className={`flex items-center justify-center gap-2 ${vibeCards[currentIndex].styles.buttonBg} ${vibeCards[currentIndex].styles.shadow} text-white text-sm font-medium px-3 py-2 rounded-lg transition shadow-md w-full`}>
+                    <FaPlay className="text-[10px]" />
+                    <span>{vibeCards[currentIndex].buttonText}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Mood Selector Section */}
+              <div className="mt-6 mb-6">
+                <h3 className="font-semibold uppercase text-xs text-gray-400 tracking-wider mb-3 px-3">
+                  How are you feeling?
+                </h3>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {feelingOptions.map((feeling, index) => {
+                    const IconComponent = feeling.icon;
+                    return (
+                      <button
+                        key={index}
+                        className={`flex items-center gap-2.5 p-2.5 rounded-xl border border-white/5 bg-white/5 text-sm text-gray-300 transition-all ${feeling.color}`}
+                      >
+                        <IconComponent className="text-sm" />
+                        <span>{feeling.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <li className="">
+                <button
+                  onClick={() => router.push('/radio')}
+                  className="flex items-center justify-between gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
+                >
+                  <span>Radio</span>
+                  <FaRadio className="text-grey-400 text-sm" />
+                </button>
+              </li>
+
+              <li className="">
+                <button
+                  onClick={() => router.push('/podcasts')}
+                  className="flex items-center justify-between gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium mb-6"
+                >
+                  <span>Podcasts</span>
+                  <FaPodcast className="text-grey-400 text-sm" />
+                </button>
+              </li>
+            </ul>
+
+            <div className="mt-auto pt-4 border-t border-white/10">
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="flex items-center justify-between gap-2 w-full p-3 mt-2 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
+              >
+                <span>Create Playlist</span>
+                <FaPlus className="text-sm" />
               </button>
             </div>
           </div>
-
-          {/* Mood Selector Section */}
-          <div className="mt-6 mb-6">
-            <h3 className="font-semibold uppercase text-xs text-gray-400 tracking-wider mb-3 px-3">
-              How are you feeling?
-            </h3>
-
-            <div className="grid grid-cols-2 gap-2">
-              {feelingOptions.map((feeling, index) => {
-                const IconComponent = feeling.icon;
-                return (
-                  <button
-                    key={index}
-                    className={`flex items-center gap-2.5 p-2.5 rounded-xl border border-white/5 bg-white/5 text-sm text-gray-300 transition-all ${feeling.color}`}
-                  >
-                    <IconComponent className="text-sm" />
-                    <span>{feeling.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <li>
-            <button
-              onClick={() => router.push('/radio')}
-              className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium"
-            >
-              <span>Radio</span>
-              <FaRadio className="text-purple-400 text-sm" />
-            </button>
-          </li>
-
-          <li>
-            <button
-              onClick={() => router.push('/radio')}
-              className="flex items-center gap-3 w-full p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium mb-6"
-            >
-              <span>Podcasts</span>
-              <FaPodcast className="text-pink-400 text-sm" />
-            </button>
-          </li>
-        </ul>
-
-        <div className="mt-auto mb-6 pt-4 border-t border-white/10">
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center justify-between gap-2 w-full p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
-          >
-            <span>Create Playlist</span>
-            <FaPlus className="text-sm" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/5">
-          {isGuest ? (
-            <div className="flex items-center text-xs text-gray-400">
-              <span className="flex items-center gap-2">
-                <FaUser className="text-gray-400" /> 
-                <span>Guest User</span>
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center font-bold text-xs text-white">
-                N
-              </div>
-              <span className="text-xs font-medium text-gray-200">User Profile</span>
-            </div>
-          )}
         </div>
       </aside >
 
-    { isCreateModalOpen && (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-white/10 p-6 rounded-2xl w-full max-w-md shadow-2xl space-y-4">
-          <h3 className="text-xl font-bold text-white">Create New Playlist</h3>
+      <aside>
+        <div className="bg-white/5 backdrop-blur-xl rounded-xl p-3 flex items-center justify-between fixed left-2 top-[92vh] w-90">
+          {isGuest ? (
+            <div className="flex items-center justify-between w-full px-2 py-1 text-xs text-gray-400">
+              <span className="flex items-center gap-2">
+                <FaUser className="text-purple-400 text-xs" /> Guest
+              </span>
+              <span className="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
+                Limited
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 px-2 py-1">
+              <div className="w-8 h-8 rounded-full bg-linear-to-tr from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow-md">
+                N
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-medium text-white">Navod</span>
+                <span className="text-[10px] text-gray-400">Pro Listener</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
 
-          <div>
-            <label className="text-xs text-gray-400 mb-3 block">Playlist Name</label>
-            <input
-              type="text"
-              placeholder="My Awesome Playlist..."
-              value={playlistName}
-              onChange={(e) => setPlaylistName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCreatePlaylist()}
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500 transition-all text-sm"
-              autoFocus
-            />
-          </div>
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-white/10 p-6 rounded-2xl w-full max-w-md shadow-2xl space-y-4">
+            <h3 className="text-xl font-bold text-white">Create New Playlist</h3>
 
-          <div className="flex gap-3 justify-end pt-2">
-            <button
-              onClick={() => {
-                setPlaylistName("");
-                setIsCreateModalOpen(false);
-              }}
-              className="px-4 py-2 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
-            >
-              Cancel
-            </button>
+            <div>
+              <label className="text-xs text-gray-400 mb-3 block">Playlist Name</label>
+              <input
+                type="text"
+                placeholder="My Awesome Playlist..."
+                value={playlistName}
+                onChange={(e) => setPlaylistName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleCreatePlaylist()}
+                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500 transition-all text-sm"
+                autoFocus
+              />
+            </div>
 
-            <button
-              onClick={handleCreatePlaylist}
-              className="px-5 py-2 rounded-xl text-sm bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/30"
-            >
-              Create
-            </button>
+            <div className="flex gap-3 justify-end pt-2">
+              <button
+                onClick={() => {
+                  setPlaylistName("");
+                  setIsCreateModalOpen(false);
+                }}
+                className="px-4 py-2 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleCreatePlaylist}
+                className="px-5 py-2 rounded-xl text-sm bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/30"
+              >
+                Create
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )
-}
+      )
+      }
     </div >
   );
 }
