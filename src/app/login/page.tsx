@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from 'react-icons/fa';
 
@@ -11,6 +11,11 @@ export default function page() {
     const [password, setPassword] = React.useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [greeting, setGreeting] = useState("");
+
+    useEffect(() => {
+        setGreeting(getGreeting());
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
