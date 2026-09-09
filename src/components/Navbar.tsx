@@ -34,7 +34,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex gap-4 items-center">
-                <Link href="/Signup" className="text-slate-300 hover:text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
+                <Link href="/signup" className="text-slate-300 hover:text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
                     Sign up
                 </Link>
                 <Link href="/login" className="bg-linear-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 text-white px-4 py-2 rounded-full text-base font-semibold shadow-md transition-all duration-200">
