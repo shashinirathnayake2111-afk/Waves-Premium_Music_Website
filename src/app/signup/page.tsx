@@ -89,7 +89,7 @@ export default function SignupPage() {
                         <div className="relative flex items-center">
                             <FaUser className="absolute left-3 text-gray-400 text-sm" />
                             <input type="text" name="name" required value={formData.name} onChange={handleChange} placeholder="Kashmira Rathnayake"
-                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
+                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white hover:border-white/30 focus:outline-none focus:border-purple-500 transition-all duration-200 placeholder-gray-600" />
                         </div>
                     </div>
 
@@ -99,7 +99,7 @@ export default function SignupPage() {
                         <div className="relative flex items-center">
                             <FaEnvelope className="absolute left-3 text-gray-400 text-sm" />
                             <input type="email" name="email" required value={formData.email} onChange={handleChange} placeholder="kashmirar@gmail.com"
-                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
+                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white hover:border-white/30 focus:outline-none focus:border-purple-500 transition-all duration-200 placeholder-gray-600" />
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@ export default function SignupPage() {
                         <div className="relative flex items-center mb-8">
                             <FaLock className="absolute left-3 text-gray-400 text-sm" />
                             <input type={showPassword ? "text" : "password"} name="password" required value={formData.password} onChange={handleChange} placeholder="••••••••"
-                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
+                                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white hover:border-white/30 focus:outline-none focus:border-purple-500 transition-all duration-200 placeholder-gray-600" />
                             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 text-gray-400 hover:text-white transition-colors">
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
@@ -116,7 +116,7 @@ export default function SignupPage() {
                     </div>
 
                     <div className="flex justify-center w-full mt-6">
-                        <button type="submit" className="w-full py-2 px-4 rounded-lg bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/30">
+                        <button type="submit" className="w-full py-2 px-4 rounded-lg bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium transform transition-all duration-300 ease-in-out hover:opacity-95 hover:-translate-y-1 active:translate-y-0 shadow-lg shadow-purple-900/30 cursor-pointer">
                             Sign Up
                         </button>
                     </div>

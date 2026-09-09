@@ -45,7 +45,7 @@ export default function page() {
             <div className="w-full max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
 
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-bold mb-1 bg-linear-to-r from-indigo-600 to-pink-600 bg-clip-text text-transparent">{getGreeting()}</h1>
+                    <h1 className="text-2xl font-bold mb-1 bg-linear-to-r from-indigo-600 to-pink-600 bg-clip-text text-transparent">{greeting}</h1>
                     <p className="text-gray-400">Log in to continue listening </p>
                 </div>
 
@@ -60,21 +60,21 @@ export default function page() {
                         <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
                         <div className="relative flex items-center">
                             <FaEnvelope className="absolute left-3 text-gray-400 text-sm" />
-                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="kashmirar@gmail.com" className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
+                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="kashmirar@gmail.com" className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white hover:border-white/50 duration-300 focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
                         </div>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
                         <div className="relative flex items-center mb-8">
                             <FaLock className="absolute left-3 text-gray-400 text-sm" />
-                            <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
+                            <input type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-white/50 duration-300 text-white focus:outline-none focus:border-purple-500 transition-all placeholder-gray-600" />
                             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 text-gray-400 hover:text-white transition-colors">
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
                     </div>
                     <div className="flex justify-center w-full mt-6">
-                        <button type="submit" className="w-full py-2 px-4 rounded-lg bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-900/30">
+                        <button type="submit" className="w-full py-2 px-4 rounded-lg bg-linear-to-r from-indigo-600 to-pink-600 text-white font-medium transform transition-all duration-300 ease-in-out hover:opacity-95 hover:-translate-y-1 active:translate-y-0 shadow-lg shadow-purple-900/30 cursor-pointer">
                             Log In
                         </button>
                     </div>
