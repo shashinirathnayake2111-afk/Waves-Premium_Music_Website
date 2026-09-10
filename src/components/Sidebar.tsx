@@ -74,7 +74,7 @@ export default function Sidebar() {
 
   return (
     <div>
-      <aside className="fixed left-2 top-15 w-90 h-[82vh] flex flex-col gap-3">
+      <aside className="relative left-2 top-15 w-90 h-[82vh] flex flex-col gap-3 flex-shrink-0">
 
         <div className=" bg-white/5 backdrop-blur-xl border border-[#091227]/10 rounded-lg p-4 overflow-y-auto flex-1 flex flex-col justify-between">
 
