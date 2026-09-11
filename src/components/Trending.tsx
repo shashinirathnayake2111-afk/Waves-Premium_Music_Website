@@ -47,7 +47,7 @@ export default function Trending() {
 
   return (
     <section className="mb-8">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <FaFire className="text-orange-500 text-xl" />
           <h2 className="text-xl font-bold text-white">Trending Now</h2>

@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
       <main>
         <div className="flex-1 flex">
-          <Sidebar />
+
           <MainContent />
         </div>
       </main>
