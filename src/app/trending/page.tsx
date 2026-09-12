@@ -88,50 +88,46 @@ export default function TrendingPage() {
                                 </button>
                             </div>
 
+                            {/* Card Details & Menu Row */}
                             <div className="flex justify-between items-start gap-2 relative">
                                 <div className="flex-1 min-w-0">
                                     <h3 className="font-semibold text-white text-base truncate">{song.title}</h3>
                                     <p className="text-sm text-gray-400 truncate mt-0.5">{song.artist}</p>
                                 </div>
 
-                                <div className="relative">
+                                {/* 3-Dots Button & Popup Wrapper */}
+                                <div className="relative" ref={activeMenuId === song.id ? menuRef : null}>
                                     <button
-                                        onClick={() => setActiveMenuId(activeMenuId === song.id ? null : song.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveMenuId(activeMenuId === song.id ? null : song.id);
+                                        }}
                                         className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
                                     >
                                         <BsThreeDotsVertical />
                                     </button>
 
-                                    {/* Dropdown Menu*/}
+                                    {/* Dropdown Menu - Card එකෙන් එළියට නොයන සේ z-index එකතු කර ඇත */}
                                     {activeMenuId === song.id && (
-                                        <div className="relative" ref={activeMenuId === song.id ? menuRef : null}>
+                                        <div className="absolute right-0 bottom-full mb-2 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl p-1.5 z-50 flex flex-col gap-1 w-32 text-xs backdrop-blur-md">
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); 
-                                                    setActiveMenuId(activeMenuId === song.id ? null : song.id);
+                                                    e.stopPropagation();
+                                                    handleDownload(song.title, '');
                                                 }}
-                                                className="absolute right-0 top-0 text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
+                                                className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap"
                                             >
-                                                <BsThreeDotsVertical />
+                                                <FaDownload className="text-purple-400 text-sm" /> Download
                                             </button>
-
-                                            {/* Dropdown Menu */}
-                                            {activeMenuId === song.id && (
-                                                <div className="absolute right-0 bottom-8 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl p-1.5 z-30 flex flex-col gap-1 w-32 text-xs backdrop-blur-md">
-                                                    <button
-                                                        onClick={() => handleDownload(song.title, '')}
-                                                        className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition"
-                                                    >
-                                                        <FaDownload className="text-purple-400 text-sm" /> Download
-                                                    </button>
-                                                    <button
-                                                        onClick={() => openLyricsModal(song)}
-                                                        className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition"
-                                                    >
-                                                        <FaFileAlt className="text-blue-400 text-sm" /> Lyrics
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    openLyricsModal(song);
+                                                }}
+                                                className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap"
+                                            >
+                                                <FaFileAlt className="text-blue-400 text-sm" /> Lyrics
+                                            </button>
                                         </div>
                                     )}
                                 </div>
