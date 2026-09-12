@@ -69,7 +69,7 @@ export default function TrendingPage() {
                     {trendingSongs.map((song) => (
                         <div
                             key={song.id}
-                            className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3.5 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between"
+                            className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3.5 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between w-full"
                         >
 
                             <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-slate-800">
@@ -110,7 +110,7 @@ export default function TrendingPage() {
                                                     e.stopPropagation(); 
                                                     setActiveMenuId(activeMenuId === song.id ? null : song.id);
                                                 }}
-                                                className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
+                                                className="absolute right-0 top-0 text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
                                             >
                                                 <BsThreeDotsVertical />
                                             </button>
