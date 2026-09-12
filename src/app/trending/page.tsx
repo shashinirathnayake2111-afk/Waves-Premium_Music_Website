@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import React, { useState, useEffect, useRef } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { FaPlay, FaFire, FaFileAlt, FaDownload, FaTimes } from 'react-icons/fa'
+import { FaPlay, FaFire, FaFileAlt, FaDownload, FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 
 export default function TrendingPage() {
     const router = useRouter()
@@ -56,19 +56,93 @@ export default function TrendingPage() {
         };
     }, []);
 
+    const [sortBy, setSortBy] = useState<'rank' | 'title' | 'artist'>('rank');
+
+    const sortedSongs = [...trendingSongs].sort((a, b) => {
+        if (sortBy === 'title') {
+            return a.title.localeCompare(b.title);
+        }
+        if (sortBy === 'artist') {
+            return a.artist.localeCompare(b.artist);
+        }
+        return a.rank - b.rank;
+    });
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 m-4 text-white">
+        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 m-4 text-white justify-between">
             <div className="w-full px-3 pt-10 pb-8 text-white">
 
-                <div className="flex items-center gap-2 mb-6">
-                    <FaFire className="text-orange-500 text-xl" />
-                    <h2 className="text-2xl font-bold text-white">Trending Songs</h2>
+                <div className="flex items-center justify-between mb-6">
+
+                    <div className="flex items-center gap-2">
+                        <FaFire className="text-orange-500 text-xl" />
+                        <h2 className="text-2xl font-bold text-white">Trending Songs</h2>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm text-gray-300">
+                        <label htmlFor="sort" className="hidden sm:inline text-gray-400">Sort by:</label>
+                        <div className="relative text-xs sm:text-sm" ref={dropdownRef}>
+                            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="bg-[#1e263c] border border-white/10 text-white rounded-lg px-3 py-1.5 flex items-center gap-3 hover:border-white/20 transition cursor-pointer"
+                            >
+                                <span>
+                                    {sortBy === 'rank' && 'Trending Rank'}
+                                    {sortBy === 'title' && 'Song Title (A-Z)'}
+                                    {sortBy === 'artist' && 'Artist Name (A-Z)'}
+                                </span>
+
+                                {isDropdownOpen ? (
+                                    <FaChevronUp className="text-xs text-purple-400" />
+                                ) : (
+                                    <FaChevronDown className="text-xs text-gray-400" />
+                                )}
+                            </button>
+
+                            {isDropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl py-1 z-50 backdrop-blur-md">
+                                    <button
+                                        onClick={() => { setSortBy('rank'); setIsDropdownOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'rank' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}
+                                    >
+                                        Trending Rank (#1)
+                                    </button>
+                                    <button
+                                        onClick={() => { setSortBy('title'); setIsDropdownOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'title' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}
+                                    >
+                                        Song Title (A-Z)
+                                    </button>
+                                    <button
+                                        onClick={() => { setSortBy('artist'); setIsDropdownOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'artist' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}
+                                    >
+                                        Artist Name (A-Z)
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-                    {trendingSongs.map((song) => (
-                        <div
-                            key={song.id}
+                    {sortedSongs.map((song) => (
+                        <div key={song.id}
                             className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3.5 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between w-full"
                         >
 
@@ -77,14 +151,12 @@ export default function TrendingPage() {
                                     #{song.rank}
                                 </span>
 
-                                <img
-                                    src={song.cover}
-                                    alt={song.title}
+                                <img src={song.cover} alt={song.title}
                                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                                 />
 
                                 <button className="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl transform translate-y-3 group-hover:translate-y-0 z-10">
-                                    <FaPlay className="text-xs ml-0.5" />
+                                    <FaPlay className="text-xs ml-1" />
                                 </button>
                             </div>
 
@@ -97,33 +169,29 @@ export default function TrendingPage() {
 
                                 {/* 3-Dots Button & Popup Wrapper */}
                                 <div className="relative" ref={activeMenuId === song.id ? menuRef : null}>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setActiveMenuId(activeMenuId === song.id ? null : song.id);
-                                        }}
+                                    <button onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveMenuId(activeMenuId === song.id ? null : song.id);
+                                    }}
                                         className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition"
                                     >
                                         <BsThreeDotsVertical />
                                     </button>
 
-                                    {/* Dropdown Menu - Card එකෙන් එළියට නොයන සේ z-index එකතු කර ඇත */}
                                     {activeMenuId === song.id && (
                                         <div className="absolute right-0 bottom-full mb-2 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl p-1.5 z-50 flex flex-col gap-1 w-32 text-xs backdrop-blur-md">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleDownload(song.title, '');
-                                                }}
+                                            <button onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDownload(song.title, '');
+                                            }}
                                                 className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap"
                                             >
                                                 <FaDownload className="text-purple-400 text-sm" /> Download
                                             </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openLyricsModal(song);
-                                                }}
+                                            <button onClick={(e) => {
+                                                e.stopPropagation();
+                                                openLyricsModal(song);
+                                            }}
                                                 className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap"
                                             >
                                                 <FaFileAlt className="text-blue-400 text-sm" /> Lyrics
@@ -132,7 +200,6 @@ export default function TrendingPage() {
                                     )}
                                 </div>
                             </div>
-
                         </div>
                     ))}
                 </div>
@@ -142,8 +209,7 @@ export default function TrendingPage() {
             {activeLyrics && (
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
                     <div className="bg-[#182030] border border-white/10 max-w-md w-full rounded-2xl p-6 relative shadow-2xl text-white">
-                        <button
-                            onClick={() => setActiveLyrics(null)}
+                        <button onClick={() => setActiveLyrics(null)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10"
                         >
                             <FaTimes />
