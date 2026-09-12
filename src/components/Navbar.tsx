@@ -20,16 +20,12 @@ export default function Navbar() {
     const currentSearch = searchParams.get('search') || ''
 
     const handleSearch = (term: string) => {
-        const params = new URLSearchParams(searchParams.toString())
-
-        if (term) {
-            params.set('search', term)
-        } else {
-            params.delete('search')
-        }
-
-        router.replace(`?${params.toString()}`)
+    if (term.trim()) {
+        router.push(`/search?q=${encodeURIComponent(term)}`);
+    } else {
+        router.push('/');
     }
+}
     return (
         <nav className="h-15 flex justify-between items-center px-6 fixed top-0 left-0 w-full bg-[#1e2639] border-b border-slate-800 z-100">
             <div className="flex gap-6 items-center">
