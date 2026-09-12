@@ -1,15 +1,35 @@
+'use client'
+
 import Image from "next/image";
 import Link from "next/link";
 import { MdHomeFilled, MdLibraryMusic } from "react-icons/md";
 import { GoSearch } from "react-icons/go";
 import { Quicksand } from 'next/font/google';
+import { useRouter, useSearchParams } from "next/navigation";
 
 const quicksand = Quicksand({
-  subsets: ['latin'],
-  weight: ['600', '700'],
+    subsets: ['latin'],
+    weight: ['600', '700'],
 });
 
 export default function Navbar() {
+
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    const currentSearch = searchParams.get('search') || ''
+
+    const handleSearch = (term: string) => {
+        const params = new URLSearchParams(searchParams.toString())
+
+        if (term) {
+            params.set('search', term)
+        } else {
+            params.delete('search')
+        }
+
+        router.replace(`?${params.toString()}`)
+    }
     return (
         <nav className="h-15 flex justify-between items-center px-6 fixed top-0 left-0 w-full bg-[#1e2639] border-b border-slate-800 z-100">
             <div className="flex gap-6 items-center">
@@ -20,7 +40,8 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
                 <div className="bg-slate-800/60 hidden lg:flex items-center w-90 h-10 px-3 gap-3 text-white text-base rounded-full border border-slate-700/50 mr-auto ml-8 transition-all duration-200">
                     <GoSearch className="text-white shrink-0" />
-                    <input className="h-full w-full outline-none placeholder:text-slate-400 bg-transparent" type="text" placeholder="What do you want to play?" />
+                    <input className="h-full w-full outline-none placeholder:text-slate-400 bg-transparent"
+                        type="text" placeholder="What do you want to play?" defaultValue={currentSearch} onChange={(e) => handleSearch(e.target.value)}/>
                 </div>
 
                 <div className="hidden lg:flex gap-4 items-center">
