@@ -4,12 +4,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { FaPlay, FaDownload, FaFileAlt, FaTimes } from 'react-icons/fa'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 
-// 🎵 Song එකක Type එක
 export interface Song {
   id: number;
   title: string;
   artist: string;
   cover: string;
+  rank?: number;
   lyrics?: string;
 }
 
@@ -22,7 +22,6 @@ export default function SongCard({ song }: SongCardProps) {
   const [showLyrics, setShowLyrics] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Menu එකෙන් එළිය Click කරද්දී auto close වීම
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -45,20 +44,22 @@ export default function SongCard({ song }: SongCardProps) {
 
   return (
     <>
-      <div className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3.5 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between w-full">
-        {/* Cover Image & Play Button */}
+      <div className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between w-full max-w-55 h-72.5 mx-auto">
+
         <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-slate-800">
-          <img 
-            src={song.cover} 
-            alt={song.title} 
-            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-          />
+          {song.rank && (
+            <span className="absolute top-2 left-2 z-10 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10">
+              #{song.rank}
+            </span>
+          )}
+
+          <img src={song.cover} alt={song.title}
+            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
           <button className="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl transform translate-y-3 group-hover:translate-y-0 z-10">
             <FaPlay className="text-xs ml-1" />
           </button>
         </div>
 
-        {/* Title, Artist & 3-Dots Dropdown */}
         <div className="flex justify-between items-start gap-2 relative">
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-white text-base truncate">{song.title}</h3>
@@ -66,7 +67,7 @@ export default function SongCard({ song }: SongCardProps) {
           </div>
 
           <div className="relative" ref={menuRef}>
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsMenuOpen(!isMenuOpen);
@@ -76,10 +77,9 @@ export default function SongCard({ song }: SongCardProps) {
               <BsThreeDotsVertical />
             </button>
 
-            {/* Dropdown Menu */}
             {isMenuOpen && (
               <div className="absolute right-0 bottom-full mb-2 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl p-1.5 z-50 flex flex-col gap-1 w-32 text-xs backdrop-blur-md">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDownload();
@@ -88,7 +88,7 @@ export default function SongCard({ song }: SongCardProps) {
                 >
                   <FaDownload className="text-purple-400 text-sm" /> Download
                 </button>
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowLyrics(true);
@@ -104,14 +104,11 @@ export default function SongCard({ song }: SongCardProps) {
         </div>
       </div>
 
-      {/* Lyrics Modal */}
       {showLyrics && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="bg-[#182030] border border-white/10 max-w-md w-full rounded-2xl p-6 relative shadow-2xl text-white">
-            <button 
-              onClick={() => setShowLyrics(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10"
-            >
+            <button onClick={() => setShowLyrics(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10">
               <FaTimes />
             </button>
             <h3 className="text-xl font-bold mb-1 text-purple-400">{song.title}</h3>
