@@ -39,16 +39,16 @@ export default function CreatePlaylistModal() {
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-gray-400 block mb-1">Playlist Name</label>
+            <label className="text-sm text-gray-400 block mb-1">Playlist Name</label>
             <input type="text" placeholder="My Playlist..." value={playlistName} onChange={(e) => setPlaylistName(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-purple-500" />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button onClick={closeCreateModal} className="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white transition" >
+            <button onClick={closeCreateModal} className="px-4 py-2 text-sm font-semibold text-gray-400 hover:text-white transition" >
               Cancel
             </button>
-            <button onClick={handleCreate} className="px-5 py-2 text-xs font-semibold bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 rounded-xl text-white transition shadow-lg">
+            <button onClick={handleCreate} className="px-5 py-2 text-sm font-semibold bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 rounded-xl text-white transition shadow-lg">
               Create
             </button>
           </div>
