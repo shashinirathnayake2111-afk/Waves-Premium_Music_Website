@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaPlay, FaDownload, FaFileAlt, FaTimes, FaHeart, FaPlus, FaCheck, FaFolder } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/src/context/ModalContext';
 
 export interface Song {
   id: number;
@@ -20,6 +21,7 @@ interface SongCardProps {
 
 export default function SongCard({ song }: SongCardProps) {
   const router = useRouter();
+  const { openCreateModal } = useModal();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
@@ -130,10 +132,10 @@ export default function SongCard({ song }: SongCardProps) {
 
       {showRightDrawer && (
         <div className="fixed inset-0 z-40 flex justify-end">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setShowRightDrawer(false)}/>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setShowRightDrawer(false)} />
 
           <div className="relative w-full max-w-xs bg-[#182030] border-l border-white/10 mt-16 h-[calc(100vh-4rem)] p-5 shadow-2xl flex flex-col justify-between z-10 text-white overflow-hidden">
-            
+
             <div className="flex flex-col flex-1 overflow-hidden">
               <div className="relative flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5 mb-4">
                 <img src={song.cover} alt={song.title} className="w-11 h-11 rounded-lg object-cover" />
@@ -154,11 +156,10 @@ export default function SongCard({ song }: SongCardProps) {
                   const isChecked = savedInFolders.includes(folder);
                   return (
                     <button key={folder} onClick={() => toggleFolder(folder)}
-                      className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-medium transition ${
-                        isChecked
+                      className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs font-medium transition ${isChecked
                           ? 'bg-purple-600/20 border-purple-500/50 text-purple-300'
                           : 'bg-white/5 border-white/5 hover:bg-white/10 text-gray-300'
-                      }`}>
+                        }`}>
                       <div className="flex items-center gap-2.5">
                         <FaFolder className={isChecked ? 'text-purple-400' : 'text-gray-400'} />
                         <span>{folder}</span>
@@ -171,7 +172,7 @@ export default function SongCard({ song }: SongCardProps) {
             </div>
 
             <div className="pt-3 pb-2 border-t border-white/10 shrink-0">
-              <button onClick={() => { setShowRightDrawer(false); router.push('/create-playlist'); }}
+              <button onClick={() => { setShowRightDrawer(false); openCreateModal(); }}
                 className="w-full bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold py-2.5 px-4 rounded-xl flex items-center justify-between transition shadow-lg group text-xs cursor-pointer" >
                 <span>Create Playlist</span>
                 <span className="bg-white/20 p-1 rounded-lg group-hover:bg-white/30 transition">

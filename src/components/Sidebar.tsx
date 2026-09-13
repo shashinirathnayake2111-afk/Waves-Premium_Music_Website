@@ -5,6 +5,7 @@ import react, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaPlay, FaSmile, FaCloudRain, FaCoffee, FaSpa } from "react-icons/fa";
 import { FaRadio, FaPlus, FaPodcast, FaUser } from "react-icons/fa6";
+import { useModal } from '@/src/context/ModalContext';
 
 export default function Sidebar() {
 
@@ -40,6 +41,8 @@ export default function Sidebar() {
       }
     },
   ];
+
+  const { openCreateModal } = useModal();
 
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -150,10 +153,8 @@ export default function Sidebar() {
             </ul>
 
             <div className="mt-auto pt-4 border-t border-white/10">
-              <button
-                onClick={() => setIsCreateModalOpen(true)}
-                className="flex items-center justify-between gap-2 w-full p-3 mt-2 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]"
-              >
+              <button onClick={openCreateModal}
+                className="flex items-center justify-between gap-2 w-full p-3 mt-2 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-sm transition-all shadow-lg shadow-purple-900/30 active:scale-[0.98]">
                 <span>Create Playlist</span>
                 <FaPlus className="text-sm" />
               </button>
