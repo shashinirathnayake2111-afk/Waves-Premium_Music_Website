@@ -114,6 +114,30 @@ export default function SongCard({ song }: SongCardProps) {
     setEditingFolder(null);
   };
 
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+
+  const handleCreateAndSelectFolder = () => {
+    const trimmed = newFolderName.trim();
+    if (trimmed !== '') {
+      let updatedFolders = folders;
+      if (!folders.includes(trimmed)) {
+        updatedFolders = [...folders, trimmed];
+        setFolders(updatedFolders);
+        localStorage.setItem('user_song_folders', JSON.stringify(updatedFolders));
+      }
+
+      if (!savedInFolders.includes(trimmed)) {
+        const updatedSaved = [...savedInFolders, trimmed];
+        setSavedInFolders(updatedSaved);
+        localStorage.setItem(`song_fav_${song.id}`, JSON.stringify(updatedSaved));
+      }
+
+      setNewFolderName('');
+      setIsCreatingNew(false);
+    }
+  };
+
   return (
     <>
       <div className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col w-full max-w-55 mx-auto">
@@ -126,7 +150,7 @@ export default function SongCard({ song }: SongCardProps) {
           )}
 
           <button onClick={(e) => { e.stopPropagation(); setShowRightDrawer(true); }}
-            className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-black/80 backdrop-blur-md p-2 rounded-full border border-white/10 transition duration-200 cursor-pointer" 
+            className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-black/80 backdrop-blur-md p-2 rounded-full border border-white/10 transition duration-200 cursor-pointer"
             title="Save to Playlist">
             <FaHeart className={`text-xs ${isFavorited ? 'text-red-500' : 'text-white/70 hover:text-white'}`} />
           </button>
@@ -151,8 +175,8 @@ export default function SongCard({ song }: SongCardProps) {
 
             {isMenuOpen && (
               <div className="absolute right-0 bottom-full mb-2 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl p-1.5 z-50 flex flex-col gap-1 w-32 text-xs backdrop-blur-md">
-                <button onClick={(e) => { e.stopPropagation(); handleDownload(); }} 
-                   className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap cursor-pointer">
+                <button onClick={(e) => { e.stopPropagation(); handleDownload(); }}
+                  className="flex items-center gap-2 hover:bg-white/10 p-2 rounded-lg text-left text-white transition whitespace-nowrap cursor-pointer">
                   <FaDownload className="text-purple-400 text-sm" /> Download
                 </button>
                 <button onClick={(e) => { e.stopPropagation(); setShowLyrics(true); setIsMenuOpen(false); }}
@@ -169,10 +193,10 @@ export default function SongCard({ song }: SongCardProps) {
         <div className="fixed inset-0 z-40 flex justify-end">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setShowRightDrawer(false)} />
 
-          <div className="fixed w-full max-w-sm bg-[#182030] border-l border-white/10 mt-16 h-[calc(97vh-2rem)] -top-6 p-5 shadow-2xl flex flex-col justify-between z-10 text-white overflow-hidden">
+          <div className="fixed w-full max-w-sm bg-[#182030] border-l border-white/10 mt-16 h-[calc(97vh-2rem)] -top-5 p-5 shadow-2xl flex flex-col justify-between z-10 text-white overflow-hidden">
 
             <div className="flex flex-col flex-1 overflow-hidden">
-              <div className="relative flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5 mb-4">
+              <div className="relative flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5 mb-6 mt-6">
                 <img src={song.cover} alt={song.title} className="w-11 h-11 rounded-lg object-cover" />
                 <div className="min-w-0 pr-6">
                   <p className="font-semibold text-base truncate">{song.title}</p>
@@ -193,11 +217,10 @@ export default function SongCard({ song }: SongCardProps) {
 
                   return (
                     <div key={folder}
-                      className={`group flex items-center justify-between p-3 rounded-xl border text-sm font-medium transition-all duration-200 ${
-                        isChecked
-                          ? 'bg-purple-600/20 border-purple-500/40 text-purple-300 shadow-md'
-                          : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/15 text-gray-300'
-                      }`}>
+                      className={`group flex items-center justify-between p-3 rounded-xl border text-sm font-medium transition-all duration-200 ${isChecked
+                        ? 'bg-purple-600/20 border-purple-500/40 text-purple-300 shadow-md'
+                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/15 text-gray-300'
+                        }`}>
                       {isEditing ? (
                         <div className="flex items-center gap-2 flex-1">
                           <input type="text" value={renameInput} onChange={(e) => setRenameInput(e.target.value)}
@@ -205,7 +228,7 @@ export default function SongCard({ song }: SongCardProps) {
                             autoFocus onKeyDown={(e) => {
                               if (e.key === 'Enter') saveRename(folder);
                               if (e.key === 'Escape') setEditingFolder(null);
-                            }}/>
+                            }} />
                           <button onClick={() => saveRename(folder)}
                             className="p-1 text-purple-400 hover:text-purple-300 cursor-pointer">
                             <FaCheck className="text-sm" />
@@ -228,7 +251,7 @@ export default function SongCard({ song }: SongCardProps) {
                                   <FaPencilAlt className="text-[15px]" />
                                 </button>
                                 <button onClick={(e) => { e.stopPropagation(); handleDeleteFolder(folder); }}
-                                  className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer" 
+                                  className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
                                   title="Delete Folder" >
                                   <FaTrash className="text-[15px]" />
                                 </button>
@@ -249,13 +272,32 @@ export default function SongCard({ song }: SongCardProps) {
               </div>
             </div>
 
-            {/* Create Playlist Action */}
             <div className="pt-4 border-t border-white/10">
-              <button onClick={() => openCreateModal()}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 text-white font-semibold text-sm shadow-lg hover:opacity-95 transition cursor-pointer">
-                <span>Create Playlist</span>
-                <FaPlus className="text-sm" />
-              </button>
+              {isCreatingNew ? (
+                <div className="flex items-center gap-2">
+                  <input type="text" placeholder="Folder name..." value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)}
+                    className="bg-black/30 text-white px-3 py-2 rounded-xl text-xs border border-purple-500/50 outline-none w-full"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleCreateAndSelectFolder();
+                      if (e.key === 'Escape') setIsCreatingNew(false);
+                    }}/>
+                  <button onClick={handleCreateAndSelectFolder}
+                    className="bg-purple-600 hover:bg-purple-500 text-white p-2.5 rounded-xl text-xs font-semibold cursor-pointer transition" >
+                    <FaCheck />
+                  </button>
+                  <button onClick={() => setIsCreatingNew(false)}
+                    className="bg-white/10 hover:bg-white/20 text-gray-300 p-2.5 rounded-xl text-xs cursor-pointer transition">
+                    <FaTimes />
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => setIsCreatingNew(true)}
+                className= "w-full flex items-center justify-between px-4 py-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 text-white font-semibold text-sm shadow-lg hover:opacity-90 transition cursor-pointer">
+                  <span>Create Folder</span>
+                  <FaPlus className="text-sm" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -265,7 +307,7 @@ export default function SongCard({ song }: SongCardProps) {
       {showLyrics && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="bg-[#182030] border border-white/10 max-w-md w-full rounded-2xl p-6 relative shadow-2xl text-white">
-            <button onClick={() => setShowLyrics(false)} 
+            <button onClick={() => setShowLyrics(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10 cursor-pointer">
               <FaTimes />
             </button>
