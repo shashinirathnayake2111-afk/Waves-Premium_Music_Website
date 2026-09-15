@@ -169,7 +169,7 @@ export default function SongCard({ song }: SongCardProps) {
         <div className="fixed inset-0 z-40 flex justify-end">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setShowRightDrawer(false)} />
 
-          <div className="fixed w-full max-w-xs bg-[#182030] border-l border-white/10 mt-16 h-[calc(100vh-2rem)] -top-6 p-5 shadow-2xl flex flex-col justify-between z-10 text-white overflow-hidden">
+          <div className="fixed w-full max-w-sm bg-[#182030] border-l border-white/10 mt-16 h-[calc(97vh-2rem)] -top-6 p-5 shadow-2xl flex flex-col justify-between z-10 text-white overflow-hidden">
 
             <div className="flex flex-col flex-1 overflow-hidden">
               <div className="relative flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5 mb-4">
@@ -252,7 +252,7 @@ export default function SongCard({ song }: SongCardProps) {
             {/* Create Playlist Action */}
             <div className="pt-4 border-t border-white/10">
               <button onClick={() => openCreateModal()}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold text-xs shadow-lg hover:opacity-95 transition cursor-pointer">
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-linear-to-r from-indigo-600 to-pink-600 text-white font-semibold text-sm shadow-lg hover:opacity-95 transition cursor-pointer">
                 <span>Create Playlist</span>
                 <FaPlus className="text-sm" />
               </button>
