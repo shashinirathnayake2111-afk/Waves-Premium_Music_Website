@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FaFire, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import SongCard from '@/src/components/SongCard' ;
+
 const trendingSongs = [
     { id: 1, rank: 1, title: 'Shape of You', artist: 'Ed Sheeran', cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80', lyrics: "The club isn't the best place to find a lover\nSo the bar is where I go..." },
     { id: 2, rank: 2, title: 'Blinding Lights', artist: 'The Weeknd', cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80', lyrics: "I've been tryin' to call\nI've been on my own for long enough..." },
