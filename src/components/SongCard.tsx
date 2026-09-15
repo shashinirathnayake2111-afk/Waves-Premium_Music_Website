@@ -116,7 +116,7 @@ export default function SongCard({ song }: SongCardProps) {
 
   return (
     <>
-      <div className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col justify-between w-full max-w-55 h-72.5 mx-auto">
+      <div className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col w-full max-w-55 mx-auto">
 
         <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-slate-800">
           {song.rank && (
