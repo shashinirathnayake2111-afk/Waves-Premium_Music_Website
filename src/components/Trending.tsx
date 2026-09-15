@@ -60,9 +60,11 @@ export default function Trending() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      <div className="flex gap-5 overflow-x-auto pb-4 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {trendingSongs.map((song) => (
-          <SongCard key={song.id} song={song} />
+          <div key={song.id} className="shrink-0 w-48">
+            <SongCard song={song} />
+          </div>
         ))}
       </div>
     </section>
