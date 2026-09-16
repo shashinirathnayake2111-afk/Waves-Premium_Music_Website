@@ -5,6 +5,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaPlay, FaFire } from 'react-icons/fa';
 import SongCard from '@/src/components/SongCard';
 import TopArtists from '@/src/components/TopArtists'
+import TopAlbums from './TopAlbums';
 
 export default function Trending() {
 
@@ -69,6 +70,7 @@ export default function Trending() {
         ))}
       </div>
       <TopArtists />
+      <TopAlbums />
     </section>
   )
 }

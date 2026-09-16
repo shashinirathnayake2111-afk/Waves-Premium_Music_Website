@@ -1,20 +1,17 @@
 'use client'
 
 import React, { useState } from 'react';
-import { 
-  FaPlay, 
-  FaPause, 
-  FaStepBackward, 
-  FaStepForward, 
-  FaVolumeUp, 
-  FaVolumeMute, 
-  FaHeart, 
-  FaRegHeart,
-  FaChevronUp,
-  FaChevronDown,
-  FaRandom,
-  FaRedo
-} from 'react-icons/fa';
+import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaVolumeUp, FaVolumeMute, FaHeart, FaRegHeart, FaChevronUp, FaChevronDown, FaRandom, FaRedo } from 'react-icons/fa';
+
+interface MusicPlayerProps {
+  currentSong: {
+    title: string;
+    artist: string;
+    cover: string;
+    duration: string;
+    currentTime: string;
+  };
+}
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);

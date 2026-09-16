@@ -6,6 +6,7 @@ import Navbar from "@/src/components/Navbar";
 import { ModalProvider } from '@/src/context/ModalContext';
 import CreatePlaylistModal from "../components/CreatePlaylistModal";
 import MusicPlayer from '@/src/components/MusicPlayer';
+import { MusicProvider } from '@/src/context/MusicContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,16 +28,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="antialiased bg-[#1e2639] flex h-screen overflow-hidden relative">
         <ModalProvider>
-          <CreatePlaylistModal />
-          <Sidebar />
-          <div className="flex-1 flex flex-col h-full overflow-y-auto">
-            <Navbar />
+          <MusicProvider>
+            <CreatePlaylistModal />
+            <Sidebar />
+            <div className="flex-1 flex flex-col h-full overflow-y-auto">
+              <Navbar />
 
-            <main className="flex-1 pb-24">
-              {children}
-            </main>
-          </div>
-          <MusicPlayer />
+              <main className="flex-1 pb-24">
+                {children}
+              </main>
+            </div>
+            <MusicPlayer />
+          </MusicProvider>
         </ModalProvider>
       </body>
     </html>
