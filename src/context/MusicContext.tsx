@@ -8,6 +8,7 @@ export interface Song {
   artist: string;
   cover: string;
   duration?: string;
+  currentTime?: string;
 }
 
 interface MusicContextType {

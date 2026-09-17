@@ -5,7 +5,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaPlay, FaFire } from 'react-icons/fa';
 import SongCard from '@/src/components/SongCard';
 import TopArtists from '@/src/components/TopArtists'
-import TopAlbums from './TopAlbums';
+import TopAlbums from '@/src/components/TopAlbums';
+import { useMusic } from '@/src/context/MusicContext';
 
 export default function Trending() {
 

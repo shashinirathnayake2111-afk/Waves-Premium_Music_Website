@@ -5,6 +5,7 @@ import { FaPlay, FaDownload, FaFileAlt, FaTimes, FaHeart, FaPlus, FaCheck, FaFol
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/src/context/ModalContext';
+import { useMusic } from '@/src/context/MusicContext';
 
 export interface Song {
   id: number;
@@ -20,6 +21,7 @@ interface SongCardProps {
 }
 
 export default function SongCard({ song }: SongCardProps) {
+  const { playSong } = useMusic();
   const router = useRouter();
   const { openCreateModal } = useModal();
 
@@ -156,7 +158,7 @@ export default function SongCard({ song }: SongCardProps) {
           </button>
 
           <img src={song.cover} alt={song.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
-          <button className="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl transform translate-y-3 group-hover:translate-y-0 z-10 cursor-pointer">
+          <button onClick={() => playSong(song)} className="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl transform translate-y-3 group-hover:translate-y-0 z-10 cursor-pointer">
             <FaPlay className="text-xs ml-0.5" />
           </button>
         </div>
