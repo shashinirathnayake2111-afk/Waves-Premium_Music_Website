@@ -1,38 +1,27 @@
-'use client'
+"use client";
 
-import React, { createContext, useContext, useState } from 'react';
-
-export interface Song {
-  id: number;
-  title: string;
-  artist: string;
-  cover: string;
-  duration?: string;
-  currentTime?: string;
-}
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface MusicContextType {
-  currentSong: Song | null;
+  currentSong: any;
   isPlaying: boolean;
-  playSong: (song: Song) => void;
+  playSong: (song: any) => void;
   togglePlay: () => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
-export function MusicProvider({ children }: { children: React.ReactNode }) {
-  const [currentSong, setCurrentSong] = useState<Song | null>(null);
+export const MusicProvider = ({ children }: { children: ReactNode }) => {
+  const [currentSong, setCurrentSong] = useState<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  const playSong = (song: Song) => {
+  const playSong = (song: any) => {
     setCurrentSong(song);
     setIsPlaying(true);
   };
 
   const togglePlay = () => {
-    if (currentSong) {
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying((prev) => !prev);
   };
 
   return (
@@ -40,12 +29,12 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
       {children}
     </MusicContext.Provider>
   );
-}
+};
 
-export function useMusic() {
+export const useMusic = () => {
   const context = useContext(MusicContext);
   if (!context) {
     throw new Error('useMusic must be used within a MusicProvider');
   }
   return context;
-}
+};
