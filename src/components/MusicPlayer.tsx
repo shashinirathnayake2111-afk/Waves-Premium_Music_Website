@@ -4,18 +4,9 @@ import React, { useState } from 'react';
 import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaVolumeUp, FaVolumeMute, FaHeart, FaRegHeart, FaChevronUp, FaChevronDown, FaRandom, FaRedo } from 'react-icons/fa';
 import { useMusic } from '@/src/context/MusicContext';
 
-interface MusicPlayerProps {
-  currentSong: {
-    title: string;
-    artist: string;
-    cover: string;
-    duration: string;
-    currentTime: string;
-  };
-}
-
 export default function MusicPlayer() {
-  const { currentSong, isPlaying, togglePlay } = useMusic();
+  const { currentSong, isPlaying, togglePlay, nextSong, previousSong } = useMusic();
+
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(70);
@@ -24,17 +15,16 @@ export default function MusicPlayer() {
 
   const [isShuffle, setIsShuffle] = useState<boolean>(false);
   const [isRepeat, setIsRepeat] = useState<boolean>(false);
+
   if (!currentSong) return null;
 
   return (
-    <div className={`fixed bottom-5 left-4 right-4 md:left-72 max-w-5xl mx-auto 
-        bg-slate-900/40 backdrop-blur-2xl border border-white/20 
-        rounded-3xl p-3 sm:px-6 z-50 text-white 
-        shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-300 ease-in-out ${isExpanded ? 'h-36 flex-col justify-between' : 'h-20 flex items-center justify-between'
-      }`}>
+    <div className={`fixed bottom-5 left-4 right-4 md:left-72 max-w-5xl mx-auto bg-slate-900/40 backdrop-blur-2xl border border-white/20 rounded-3xl p-3 sm:px-6 z-50 text-white shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-300 ease-in-out ${
+          isExpanded ? 'h-36 flex-col justify-between' : 'h-20 flex items-center justify-between'}`}>
 
       <div className="flex items-center justify-between w-full gap-4">
 
+        {/* Song Info Section */}
         <div className="flex items-center gap-3 w-1/3 min-w-45px">
           <div className="hidden sm:flex items-center gap-1.5 mr-2">
             <button onClick={() => setIsExpanded(!isExpanded)}
@@ -63,17 +53,18 @@ export default function MusicPlayer() {
           </button>
         </div>
 
+        {/* Controls Section */}
         <div className="flex flex-col items-center gap-1.5 w-1/3 max-w-xs">
           <div className="flex items-center gap-3 sm:gap-5">
 
             <button onClick={() => setIsShuffle(!isShuffle)}
-              className={`transition text-xs sm:text-sm cursor-pointer ${isShuffle ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' : 'text-white/40 hover:text-white'
-                }`}
+              className={`transition text-xs sm:text-sm cursor-pointer ${
+                isShuffle ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' : 'text-white/40 hover:text-white' }`}
               title="Shuffle" >
               <FaRandom />
             </button>
 
-            <button className="text-white/60 hover:text-white transition text-xs sm:text-sm cursor-pointer">
+            <button onClick={previousSong} className="text-white/60 hover:text-white transition text-xs sm:text-sm cursor-pointer">
               <FaStepBackward />
             </button>
 
@@ -82,17 +73,16 @@ export default function MusicPlayer() {
               {isPlaying ? <FaPause className="text-xs sm:text-sm" /> : <FaPlay className="ml-0.5 text-xs sm:text-sm" />}
             </button>
 
-            <button className="text-white/60 hover:text-white transition text-xs sm:text-sm cursor-pointer">
+            <button onClick={nextSong} className="text-white/60 hover:text-white transition text-xs sm:text-sm cursor-pointer">
               <FaStepForward />
             </button>
 
             <button onClick={() => setIsRepeat(!isRepeat)}
-              className={`transition text-xs sm:text-sm cursor-pointer ${isRepeat ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' : 'text-white/40 hover:text-white'
-                }`}
+              className={`transition text-xs sm:text-sm cursor-pointer ${
+                isRepeat ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' : 'text-white/40 hover:text-white'}`}
               title="Repeat">
               <FaRedo />
             </button>
-
           </div>
 
           {!isExpanded && (
@@ -112,6 +102,7 @@ export default function MusicPlayer() {
           )}
         </div>
 
+        {/* Volume & Expand Section */}
         <div className="flex items-center justify-end gap-3 w-1/3 min-w-30px">
           <button onClick={() => setIsMuted(!isMuted)}
             className="text-white/60 hover:text-white transition text-sm cursor-pointer">

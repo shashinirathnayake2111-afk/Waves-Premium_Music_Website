@@ -90,7 +90,7 @@ export default function TopArtists() {
 
   const handlePlayArtist = (artist: Artist) => {
     if (artist.songs && artist.songs.length > 0) {
-      playSong(artist.songs[0]);
+      playSong(artist.songs[0], artist.songs );
     }
   };
 
