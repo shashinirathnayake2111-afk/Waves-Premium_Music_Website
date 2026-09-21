@@ -3,6 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FaMicrophone, FaPlay } from 'react-icons/fa';
+import { useMusic } from '@/src/context/MusicContext';
 
 interface Artist {
     id: string;

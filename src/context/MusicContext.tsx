@@ -2,10 +2,21 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+export interface Song {
+  id: string;
+  title: string;
+  artist: string;
+  album?: string;
+  coverImage: string;
+  audioUrl?: string;
+  duration?: string;    
+  currentTime?: string;
+}
+
 interface MusicContextType {
-  currentSong: any;
+  currentSong: Song | null;
   isPlaying: boolean;
-  playSong: (song: any) => void;
+  playSong: (song: Song) => void;
   togglePlay: () => void;
 }
 
@@ -15,23 +26,21 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
   const [currentSong, setCurrentSong] = useState<any>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  // 1️⃣ Page එක මුලින්ම Load වෙද්දී LocalStorage එකෙන් Data ලබාගැනීම
-  useEffect(() => {
-    const savedSong = localStorage.getItem('currentSong');
+useEffect(() => {
+    const savedSong = sessionStorage.getItem('currentSong');
     if (savedSong) {
       try {
         setCurrentSong(JSON.parse(savedSong));
       } catch (error) {
-        console.error("Error parsing saved song:", error);
+        console.error("Error loading saved song:", error);
       }
     }
   }, []);
 
-  // 2️⃣ සින්දුවක් Select කළ විට LocalStorage එකේ Save කිරීම
-  const playSong = (song: any) => {
+  const playSong = (song: Song) => {
     setCurrentSong(song);
     setIsPlaying(true);
-    localStorage.setItem('currentSong', JSON.stringify(song)); // 💾 Save to localStorage
+    sessionStorage.setItem('currentSong', JSON.stringify(song));
   };
 
   const togglePlay = () => {

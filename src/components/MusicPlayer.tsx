@@ -43,7 +43,7 @@ export default function MusicPlayer() {
           </div>
 
           <div className="relative group shrink-0">
-            <img src={currentSong.cover} alt={currentSong.title}
+            <img src={currentSong.coverImage} alt={currentSong.title}
               className="w-12 h-12 rounded-2xl object-cover border border-white/20 shadow-lg group-hover:scale-105 transition duration-300" />
             <div className="absolute inset-0 bg-black/20 rounded-2xl opacity-0 group-hover:opacity-100 transition" />
           </div>

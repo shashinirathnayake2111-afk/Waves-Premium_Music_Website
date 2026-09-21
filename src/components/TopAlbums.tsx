@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import React from 'react';
 import { FaPlay, FaEarlybirds } from 'react-icons/fa';
+import { useMusic } from '@/src/context/MusicContext';
 
-// Albums data වැඩි කර සකස් කරන ලදී
 export const albumsData = [
   {
     id: 1,
@@ -62,11 +62,22 @@ export const albumsData = [
   }
 ];
 
-interface TopAlbumsProps {
-  onSelectAlbum?: (album: typeof albumsData[0]) => void;
-}
+export default function TopAlbums() {
+  const { playSong } = useMusic();
 
-export default function TopAlbums({ onSelectAlbum }: TopAlbumsProps) {
+  const handlePlayAlbum = (album: typeof albumsData[0]) => {
+    if (album.songs && album.songs.length > 0) {
+      const firstSong = album.songs[0];
+
+      playSong({
+        id: String(firstSong.id),
+        title: firstSong.title,
+        artist: firstSong.artist,
+        coverImage: firstSong.cover,
+      });
+    }
+  }
+
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-6">
@@ -81,24 +92,22 @@ export default function TopAlbums({ onSelectAlbum }: TopAlbumsProps) {
 
       <div className="flex items-center gap-4 overflow-x-auto pb-4 pt-1 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {albumsData.map((album) => (
-          <div key={album.id} onClick={() => onSelectAlbum && onSelectAlbum(album)}
-            className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col w-44 sm:w-48 shrink-0 cursor-pointer" >
-
+          <div key={album.id} onClick={() => handlePlayAlbum(album)}
+            className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col w-44 sm:w-48 shrink-0 cursor-pointer">
             <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-slate-800">
               <img src={album.cover} alt={album.title}
                 className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"/>
 
               <button onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectAlbum && onSelectAlbum(album);
+                  e.stopPropagation(); 
+                  handlePlayAlbum(album);
                 }}
                 className="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl transform translate-y-3 group-hover:translate-y-0 z-10 cursor-pointer"
-                title={`Play ${album.title}`} >
+                title={`Play ${album.title}`}>
                 <FaPlay className="text-xs ml-0.5 text-white" />
               </button>
             </div>
 
-            {/* Album & Artist Info */}
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-white text-base truncate transition-colors">
                 {album.title}
