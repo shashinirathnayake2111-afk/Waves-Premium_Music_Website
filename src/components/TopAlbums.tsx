@@ -71,9 +71,9 @@ export default function TopAlbums() {
 
       playSong({
         id: String(firstSong.id),
-        title: firstSong.title,
-        artist: firstSong.artist,
-        coverImage: firstSong.cover,
+        title: album.title,
+        artist: album.artist,
+        coverImage: album.cover,
       });
     }
   }
