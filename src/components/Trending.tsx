@@ -40,12 +40,6 @@ export default function Trending() {
       title: 'Peaches',
       artist: 'Justin Bieber',
       cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80'
-    },
-    {
-      id: 6,
-      title: 'Good 4 U',
-      artist: 'Olivia Rodrigo',
-      cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80'
     }
   ]
 
@@ -63,7 +57,7 @@ export default function Trending() {
         </Link>
       </div>
 
-      <div className="flex gap-5 overflow-x-auto pb-4 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex gap-8 overflow-x-auto pb-4 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {trendingSongs.map((song) => (
           <div key={song.id} className="shrink-0 w-48">
             <SongCard song={song} />
