@@ -90,7 +90,7 @@ export default function TopAlbums() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-4 overflow-x-auto pb-4 pt-1 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-center gap-8 overflow-x-auto pb-4 pt-1 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {albumsData.map((album) => (
           <div key={album.id} onClick={() => handlePlayAlbum(album)}
             className="group relative bg-white/5 border border-white/5 hover:border-white/20 p-3 rounded-2xl transition-all duration-300 hover:bg-white/10 flex flex-col w-44 sm:w-48 shrink-0 cursor-pointer">

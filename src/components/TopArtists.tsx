@@ -106,7 +106,7 @@ export default function TopArtists() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-1 sm:gap-10 overflow-x-auto pb-4 pt-1 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-center gap-8 sm:gap-12 overflow-x-auto pb-4 pt-1 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {dummyArtists.map((artist) => (
           <div key={artist.id} onClick={() => handlePlayArtist(artist)}
             className="flex flex-col items-center group text-center cursor-pointer p-2 transition duration-300 shrink-0">

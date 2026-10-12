@@ -40,6 +40,12 @@ export default function Trending() {
       title: 'Peaches',
       artist: 'Justin Bieber',
       cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80'
+    },
+    {
+      id: 6,
+      title: 'Good 4 U',
+      artist: 'Olivia Rodrigo',
+      cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80'
     }
   ]
 
