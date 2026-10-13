@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/src/app/globals.css";
-import Sidebar from "@/src/components/Sidebar";
-import Navbar from "@/src/components/Navbar";
 import { ModalProvider } from '@/src/context/ModalContext';
 import CreatePlaylistModal from "../components/CreatePlaylistModal";
 import MusicPlayer from '@/src/components/MusicPlayer';
 import { MusicProvider } from '@/src/context/MusicContext';
+import ClientLayout from "@/src/components/ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +29,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ModalProvider>
           <MusicProvider>
             <CreatePlaylistModal />
-            <Sidebar />
-            <div className="flex-1 flex flex-col h-full overflow-y-auto">
-              <Navbar />
-
+            <ClientLayout>
               <main className="flex-1 pb-24">
                 {children}
               </main>
-            </div>
+              </ClientLayout>
             <MusicPlayer />
           </MusicProvider>
         </ModalProvider>
