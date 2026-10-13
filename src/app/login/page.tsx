@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from 'react-icons/fa';
 
-export default function page() {
+export default function Page() {
 
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
