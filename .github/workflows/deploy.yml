@@ -1,0 +1,50 @@
+name: Waves Next.js CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ] 
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  # 1. CI Phase
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code එක Check out කරගැනීම
+        uses: actions/checkout@v4
+
+      - name: Node.js Environment එක Setup කිරීම
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+          cache: 'npm'
+
+      - name: Dependencies Install කිරීම
+        run: npm ci
+
+      - name: Next.js Linter එක Run කිරීම
+        run: npm run lint --if-present
+
+      - name: Next.js Project එක Build කර බලීම
+        run: npm run build
+
+  # 2. CD Phase
+  deploy-to-vercel:
+    needs: build-and-test 
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code එක Check out කරගැනීම
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
