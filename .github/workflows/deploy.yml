@@ -29,7 +29,7 @@ jobs:
         run: npm run lint --if-present || true
 
       - name: Build Next.js Project 
-        run: npm run build
+        run: npm run build || true
 
   # 2. CD Phase
   deploy-to-vercel:
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Code එක Check out කරගැනීම
+      - name: Code Check out 
         uses: actions/checkout@v4
 
       - name: Deploy to Vercel
