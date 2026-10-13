@@ -16,7 +16,7 @@ export interface Song {
 interface MusicContextType {
   currentSong: Song | null;
   isPlaying: boolean;
-  playSong: (song: Song, playlist?: Song[]) => void; 
+  playSong: (song: Song, playlist?: Song[]) => void;
   togglePlay: () => void;
   nextSong: () => void;
   previousSong: () => void;
@@ -24,12 +24,11 @@ interface MusicContextType {
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
-export const MusicProvider = ({ children }: { children: ReactNode }) => {
+export function MusicProvider({ children }: { children: React.ReactNode }) {
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-
   const [queue, setQueue] = useState<Song[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
     const savedSong = sessionStorage.getItem('currentSong');
@@ -39,7 +38,7 @@ export const MusicProvider = ({ children }: { children: ReactNode }) => {
         setCurrentSong(song);
         setQueue([song]);
       } catch (error) {
-        console.error("Error loading saved song:", error);
+        console.error("Error loading saved song from sessionStorage:", error);
       }
     }
   }, []);
