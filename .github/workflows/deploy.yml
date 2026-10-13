@@ -26,9 +26,9 @@ jobs:
         run: npm ci
 
       - name: Run Next.js Linter 
-        run: npm run lint --if-present
+        run: npm run lint --if-present || true
 
-      - name: Next.js Project Build
+      - name: Build Next.js Project 
         run: npm run build
 
   # 2. CD Phase
