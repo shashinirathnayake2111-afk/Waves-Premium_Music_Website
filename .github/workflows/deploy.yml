@@ -28,7 +28,7 @@ jobs:
       - name: Run Next.js Linter 
         run: npm run lint --if-present
 
-      - name: Build Next.js Project 
+      - name: Next.js Project Build
         run: npm run build
 
   # 2. CD Phase
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
+      - name: Code එක Check out කරගැනීම
         uses: actions/checkout@v4
 
       - name: Deploy to Vercel
