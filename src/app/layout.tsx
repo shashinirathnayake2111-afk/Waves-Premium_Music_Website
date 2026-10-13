@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/src/app/globals.css";
 import { ModalProvider } from '@/src/context/ModalContext';
 import CreatePlaylistModal from "../components/CreatePlaylistModal";
-import MusicPlayer from '@/src/components/MusicPlayer';
 import { MusicProvider } from '@/src/context/MusicContext';
 import ClientLayout from "@/src/components/ClientLayout";
 
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 {children}
               </main>
               </ClientLayout>
-            <MusicPlayer />
           </MusicProvider>
         </ModalProvider>
       </body>
