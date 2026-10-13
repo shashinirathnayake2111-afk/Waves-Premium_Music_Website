@@ -81,7 +81,7 @@ export default function Page() {
                 </form>
 
                 <div className="mt-6 text-center text-sm text-grey-300">
-                    Don't you have an account?{""}
+                    Don&apos;t have an account?{""}
                     <Link href="/signup" className="text-purple-500 font-medium hover:underline ml-1">
                         Sign Up
                     </Link>
