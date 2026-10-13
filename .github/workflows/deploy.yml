@@ -13,22 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Code එක Check out කරගැනීම
+      - name: Check out the code
         uses: actions/checkout@v4
 
-      - name: Node.js Environment එක Setup කිරීම
+      - name: Setup Node.js Environment 
         uses: actions/setup-node@v4
         with:
           node-version: '20' 
           cache: 'npm'
 
-      - name: Dependencies Install කිරීම
+      - name: Install Dependencies 
         run: npm ci
 
-      - name: Next.js Linter එක Run කිරීම
+      - name: Run Next.js Linter 
         run: npm run lint --if-present
 
-      - name: Next.js Project එක Build කර බලීම
+      - name: Build Next.js Project 
         run: npm run build
 
   # 2. CD Phase
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Code එක Check out කරගැනීම
+      - name: Check out the code
         uses: actions/checkout@v4
 
       - name: Deploy to Vercel
