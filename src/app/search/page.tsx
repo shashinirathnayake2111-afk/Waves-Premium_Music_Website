@@ -1,7 +1,7 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
 import { FaSearch, FaMicrophone, FaMusic } from 'react-icons/fa';
 import SongCard from '@/src/components/SongCard';
 
@@ -28,6 +28,13 @@ const allArtists = [
 function SearchResults() {
     const searchParams = useSearchParams();
     const query = searchParams.get('q') || '';
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!query) {
+            router.push('/');
+        }
+    }, [query, router]);
 
     const [activeTab] = useState<'all' | 'songs' | 'artists'>('all');
 
