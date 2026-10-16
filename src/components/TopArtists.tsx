@@ -95,7 +95,7 @@ export default function TopArtists() {
   };
 
   return (
-    <section className="mt-8">
+    <section className="mt-2">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <FaMicrophone className="text-purple-500 text-xl" />
