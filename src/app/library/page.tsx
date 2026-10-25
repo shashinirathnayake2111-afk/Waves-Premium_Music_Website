@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { FaArrowLeft, FaHeart, FaList, FaMusic, FaPlay, FaPlus, FaTimes, FaBook } from 'react-icons/fa';
+import { FaArrowLeft, FaHeart, FaList, FaMusic, FaPause, FaPlay, FaPlus, FaTimes } from 'react-icons/fa';
 import { useModal } from '@/src/context/ModalContext';
 import { useMusic, Song } from '@/src/context/MusicContext';
 import {
@@ -26,26 +26,30 @@ const toPlayerSong = (s: CatalogSong): Song => ({
     coverImage: s.cover,
 });
 
-function SongRow({ song, onPlay, onRemove, removeLabel }: {
+function SongRow({ song, isCurrent, isPlaying, onPlay, onRemove, removeLabel }: {
     song: CatalogSong;
+    isCurrent: boolean;
+    isPlaying: boolean;
     onPlay: () => void;
     onRemove: () => void;
     removeLabel: string;
 }) {
+    const showPause = isCurrent && isPlaying;
+
     return (
-        <li className="group flex items-center gap-3 p-2 pr-3 rounded-xl hover:bg-white/10 transition">
-            <button onClick={onPlay} aria-label={`Play ${song.title} by ${song.artist}`}
-                className="relative shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-slate-800 cursor-pointer focus-visible:outline-2 focus-visible:outline-purple-400">
-                <img src={song.cover} alt="" className="w-full h-full object-cover" />
-                <span className="absolute inset-0 grid place-items-center bg-black/40 text-white">
-                    <FaPlay className="text-xs ml-0.5" />
-                </span>
-            </button>
+        <li className={`flex items-center gap-3 p-2 pr-3 rounded-xl transition ${isCurrent ? 'bg-purple-600/15' : 'hover:bg-white/10'}`}>
+            <img src={song.cover} alt="" className="shrink-0 w-14 h-14 rounded-lg object-cover bg-slate-800" />
 
             <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white truncate">{song.title}</p>
+                <p className={`font-semibold truncate ${isCurrent ? 'text-purple-300' : 'text-white'}`}>{song.title}</p>
                 <p className="text-sm text-gray-400 truncate">{song.artist}</p>
             </div>
+
+            <button onClick={onPlay}
+                aria-label={showPause ? `Pause ${song.title}` : `Play ${song.title} by ${song.artist}`}
+                className="shrink-0 w-10 h-10 grid place-items-center rounded-full bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/30 hover:scale-105 active:scale-95 transition cursor-pointer focus-visible:outline-2 focus-visible:outline-purple-300">
+                {showPause ? <FaPause className="text-xs" /> : <FaPlay className="text-xs ml-0.5" />}
+            </button>
 
             <button onClick={onRemove} aria-label={removeLabel} title={removeLabel}
                 className="shrink-0 w-9 h-9 grid place-items-center rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition cursor-pointer focus-visible:outline-2 focus-visible:outline-purple-400">
@@ -76,7 +80,7 @@ function EmptyState({ icon, title, hint, action }: {
 function LibraryContent() {
     const searchParams = useSearchParams();
     const { openCreateModal } = useModal();
-    const { playSong } = useMusic();
+    const { playSong, togglePlay, currentSong, isPlaying } = useMusic();
 
     const [loaded, setLoaded] = useState(false);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -104,6 +108,11 @@ function LibraryContent() {
     };
 
     const playOne = (songs: CatalogSong[], index: number) => {
+        const song = songs[index];
+        if (currentSong?.id === String(song.id)) {
+            togglePlay();
+            return;
+        }
         const queue = songs.map(toPlayerSong);
         playSong(queue[index], queue);
     };
@@ -120,6 +129,8 @@ function LibraryContent() {
         <ul className="space-y-1">
             {songs.map((song, i) => (
                 <SongRow key={song.id} song={song}
+                    isCurrent={currentSong?.id === String(song.id)}
+                    isPlaying={isPlaying}
                     onPlay={() => playOne(songs, i)}
                     onRemove={() => remove(song.id, name)}
                     removeLabel={name === FAVORITES ? `Remove ${song.title} from liked songs` : `Remove ${song.title} from ${name}`} />
@@ -176,11 +187,12 @@ function LibraryContent() {
         );
     }
 
+    /* ---------- Main library view ---------- */
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 m-4 text-white justify-between">
-            <div className="w-full px-3 pt-10 pb-8 text-white flex flex-wrap items-center justify-between gap-10">
+        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-3">
-                    <FaBook className="text-purple-400" /> Your library
+                    <FaMusic className="text-purple-400" /> Your library
                 </h2>
 
                 <nav className="flex gap-2" aria-label="Library sections">
