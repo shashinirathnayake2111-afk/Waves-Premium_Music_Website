@@ -29,9 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <MusicProvider>
             <CreatePlaylistModal />
             <ClientLayout>
-              <main className="flex-1 pb-24">
                 {children}
-              </main>
               </ClientLayout>
           </MusicProvider>
         </ModalProvider>

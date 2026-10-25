@@ -10,19 +10,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   return (
-    <div
-      className={`min-h-screen flex flex-col ${
-        isAuthPage
-          ? "overflow-hidden [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          : "overflow-y-auto"
-      }`}
-    >
+    <div className="flex flex-col w-full h-screen overflow-hidden">
       {!isAuthPage && <Navbar />}
 
-      <div className="flex flex-1 h-full overflow-hidden">
+      <div className="flex flex-1 min-h-0">
         {!isAuthPage && <Sidebar />}
 
-        <main className="flex-1 pb-24 overflow-y-auto">
+        <main className="flex-1 min-w-0 overflow-y-auto pb-28 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {children}
         </main>
       </div>
