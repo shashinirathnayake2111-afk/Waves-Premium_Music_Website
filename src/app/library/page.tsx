@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { FaArrowLeft, FaHeart, FaList, FaMusic, FaPause, FaPlay, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaHeart, FaList, FaBook, FaPause, FaPlay, FaPlus, FaTimes } from 'react-icons/fa';
 import { useModal } from '@/src/context/ModalContext';
 import { useMusic, Song } from '@/src/context/MusicContext';
 import {
@@ -178,7 +178,7 @@ function LibraryContent() {
                         </div>
 
                         {songs.length === 0 ? (
-                            <EmptyState icon={<FaMusic />} title="No songs here yet"
+                            <EmptyState icon={<FaBook />} title="No songs here yet"
                                 hint="Tap the heart on any song and pick this playlist to add it." />
                         ) : renderSongList(selectedName, songs)}
                     </>
@@ -187,12 +187,11 @@ function LibraryContent() {
         );
     }
 
-    /* ---------- Main library view ---------- */
     return (
         <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-3">
-                    <FaMusic className="text-purple-400" /> Your library
+                    <FaBook className="text-purple-400" /> My library
                 </h2>
 
                 <nav className="flex gap-2" aria-label="Library sections">
@@ -250,7 +249,7 @@ function LibraryContent() {
                                             {playlist.songs[0] ? (
                                                 <img src={playlist.songs[0].cover} alt="" className="w-full h-full object-cover" />
                                             ) : (
-                                                <FaMusic className="text-3xl text-white/60" />
+                                                <FaBook className="text-3xl text-white/60" />
                                             )}
                                         </div>
                                         <h4 className="font-semibold text-white truncate">{playlist.name}</h4>
