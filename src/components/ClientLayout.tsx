@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/src/components/Sidebar";
 import Navbar from "@/src/components/Navbar";
@@ -11,11 +12,17 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className="flex flex-col w-full h-screen overflow-hidden">
-      {!isAuthPage && <Navbar />}
+      {/* Navbar is rendered ONLY here (not inside any page) */}
+      {!isAuthPage && (
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
+      )}
 
       <div className="flex flex-1 min-h-0">
         {!isAuthPage && <Sidebar />}
 
+        {/* The only <main> and the only scroll area in the app */}
         <main className="flex-1 min-w-0 overflow-y-auto pb-28 [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {children}
         </main>
