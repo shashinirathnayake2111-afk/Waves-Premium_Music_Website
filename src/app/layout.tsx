@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/src/app/globals.css";
-import { ModalProvider } from '@/src/context/ModalContext';
-import CreatePlaylistModal from "../components/CreatePlaylistModal";
-import { MusicProvider } from '@/src/context/MusicContext';
+import { ModalProvider } from "@/src/context/ModalContext";
+import { MusicProvider } from "@/src/context/MusicContext";
+import CreatePlaylistModal from "@/src/components/CreatePlaylistModal";
 import ClientLayout from "@/src/components/ClientLayout";
 
 const geistSans = Geist({
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased bg-[#1e2639] flex h-screen overflow-hidden relative">
+      <body className="antialiased bg-[#1e2639]">
         <ModalProvider>
           <MusicProvider>
             <CreatePlaylistModal />
             <ClientLayout>
-                {children}
-              </ClientLayout>
+              {children}
+            </ClientLayout>
           </MusicProvider>
         </ModalProvider>
       </body>
