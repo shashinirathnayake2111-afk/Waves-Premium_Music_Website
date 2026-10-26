@@ -67,11 +67,11 @@ function ArtistsContent() {
     };
 
     return (
-        <div className="flex-1 min-h-[calc(100vh-5rem)] bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 m-4 text-white mt-16">
+        <div className="flex-1 min-h-[calc(100vh-4rem)] bg-white/5 backdrop-blur-xl rounded-lg p-6 m-4 text-white mt-15">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
                     <FaMicrophone className="text-purple-500 text-xl" />
-                    <h1 className="text-2xl font-bold text-white">Top Artists</h1>
+                    <h1 className="text-xl font-bold text-white">Top Artists</h1>
                 </div>
 
                 <div className="flex items-center gap-2 overflow-x-auto pb-1">
