@@ -56,7 +56,7 @@ function TrendingContent() {
     });
 
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 m-4 text-white justify-between">
+        <div className="flex-1 bg-white/5 backdrop-blur-xl rounded-lg p-6 m-4 text-white justify-between min-h-[calc(100vh-4rem)">
             <div className="w-full px-3 pt-10 pb-8 text-white">
 
                 <div className="flex items-center justify-between mb-6">
