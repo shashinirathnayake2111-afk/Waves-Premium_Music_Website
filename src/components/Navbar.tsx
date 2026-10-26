@@ -42,7 +42,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-3">
-                <div className="bg-slate-800/60 hidden lg:flex items-center w-90 h-10 px-3 gap-3 text-white text-base rounded-full border border-slate-700/50 mr-auto ml-8 transition-all duration-200 focus-within:border-purple-500">
+                <div className="bg-slate-800/60 hidden lg:flex items-center w-90 h-10 px-3 gap-3 text-white text-base rounded-full border border-slate-700/50 mr-auto ml-8 transition-all duration-200 focus-within:border-indigo-50">
                     <GoSearch className="text-white shrink-0" aria-hidden="true" />
                     <input className="h-full w-full outline-none placeholder:text-slate-400 bg-transparent"
                         type="text" aria-label="Search songs and artists" placeholder="What do you want to play?"
