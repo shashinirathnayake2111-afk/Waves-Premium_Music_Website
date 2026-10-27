@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "@/src/app/globals.css";
 import { ModalProvider } from "@/src/context/ModalContext";
 import { MusicProvider } from "@/src/context/MusicContext";
 import CreatePlaylistModal from "@/src/components/CreatePlaylistModal";
 import ClientLayout from "@/src/components/ClientLayout";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Waves - Premiere Music Website",
@@ -23,14 +14,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="antialiased bg-[#1e2639]">
         <ModalProvider>
           <MusicProvider>
             <CreatePlaylistModal />
-            <ClientLayout>
-              {children}
-            </ClientLayout>
+            <ClientLayout>{children}</ClientLayout>
           </MusicProvider>
         </ModalProvider>
       </body>
