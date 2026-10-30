@@ -188,7 +188,7 @@ function LibraryContent() {
     }
 
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
+        <div className="flex-1 bg-white/5 backdrop-blur-xl rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-3">
                     <FaBook className="text-purple-400" /> My library

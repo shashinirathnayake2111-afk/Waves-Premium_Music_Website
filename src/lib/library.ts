@@ -1,9 +1,3 @@
-// Temporary local library helpers.
-// Playlists live in localStorage until Supabase is connected.
-// Keys match what SongCard / CreatePlaylistModal already write:
-//   user_song_folders   -> string[]  (folder names)
-//   song_fav_<songId>   -> string[]  (folders that contain the song)
-
 export interface CatalogSong {
   id: number;
   title: string;
@@ -14,7 +8,6 @@ export interface CatalogSong {
 export const FOLDERS_KEY = 'user_song_folders';
 export const FAVORITES = 'Favorites';
 
-// Same ids as the home page (Trending.tsx). Replace with API data later.
 export const songCatalog: CatalogSong[] = [
   { id: 1, title: 'Shape of You', artist: 'Ed Sheeran', cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80' },
   { id: 2, title: 'Blinding Lights', artist: 'The Weeknd', cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80' },
