@@ -84,9 +84,6 @@ export default function Sidebar() {
         <div className=" bg-white/5 backdrop-blur-xl border border-[#091227]/10 rounded-lg p-4 overflow-y-auto [scrollbar:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-1 flex flex-col justify-between">
 
           <div>
-            <h2 className="font-semibold uppercase text-sm text-gray-300 tracking-wider mb-6 mt-4 px-3">
-              Your Music Store
-            </h2>
 
             <ul className="space-y-2 w-full">
 

@@ -9,7 +9,7 @@ import ClientLayout from "@/src/components/ClientLayout";
 
 export const metadata: Metadata = {
   title: "Waves - Premiere Music Website",
-  description: "Music Website with AI & Global Music Hub By Shasihini Rathnayake",
+  description: "Music Website with AI & Global Music Hub",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
