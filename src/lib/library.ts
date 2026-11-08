@@ -1,43 +1,126 @@
-export interface CatalogSong {
-  id: number;
-  title: string;
-  artist: string;
-  cover: string;
-}
+import type { Song } from '@/src/types/music';
 
 export const FOLDERS_KEY = 'user_song_folders';
 export const FAVORITES = 'Favorites';
 
-export const songCatalog: CatalogSong[] = [
-  { id: 1, title: 'Shape of You', artist: 'Ed Sheeran', cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80' },
-  { id: 2, title: 'Blinding Lights', artist: 'The Weeknd', cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80' },
-  { id: 3, title: 'Stay', artist: 'The Kid LAROI, Justin Bieber', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&q=80' },
-  { id: 4, title: 'Levitating', artist: 'Dua Lipa', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80' },
-  { id: 5, title: 'Peaches', artist: 'Justin Bieber', cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80' },
-  { id: 6, title: 'Good 4 U', artist: 'Olivia Rodrigo', cover: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500&q=80' },
-];
+const FAV_PREFIX = 'song_fav_';
+const DATA_PREFIX = 'song_data_';
+const CHANGE_EVENT = 'waves:library-changed';
 
-function readArray(key: string): string[] {
+function readJSON<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    const parsed = raw ? JSON.parse(raw) : null;
-    return Array.isArray(parsed) ? parsed : [];
+    if (!raw) return fallback;
+    return (JSON.parse(raw) as T) ?? fallback;
   } catch {
-    return [];
+    return fallback;
   }
 }
 
+function notify() {
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+// Call this in useEffect to refresh UI when the library changes (same tab or other tabs)
+export function onLibraryChange(callback: () => void): () => void {
+  window.addEventListener(CHANGE_EVENT, callback);
+  window.addEventListener('storage', callback);
+  return () => {
+    window.removeEventListener(CHANGE_EVENT, callback);
+    window.removeEventListener('storage', callback);
+  };
+}
+
+// ---------- Folders ----------
 export function readFolders(): string[] {
-  const folders = readArray(FOLDERS_KEY);
+  const stored = readJSON<unknown>(FOLDERS_KEY, []);
+  const folders = Array.isArray(stored) ? stored.filter((f): f is string => typeof f === 'string') : [];
   return folders.length > 0 ? folders : [FAVORITES];
 }
 
-export function readFolderSongs(folder: string): CatalogSong[] {
-  return songCatalog.filter((song) => readArray(`song_fav_${song.id}`).includes(folder));
+function writeFolders(folders: string[]) {
+  localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
 }
 
-export function removeSongFromFolder(songId: number, folder: string) {
-  const key = `song_fav_${songId}`;
-  const updated = readArray(key).filter((f) => f !== folder);
-  localStorage.setItem(key, JSON.stringify(updated));
+function allSongIds(): string[] {
+  const ids: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(FAV_PREFIX)) ids.push(key.slice(FAV_PREFIX.length));
+  }
+  return ids;
+}
+
+export function createFolder(name: string): boolean {
+  const trimmed = name.trim();
+  if (!trimmed) return false;
+  const folders = readFolders();
+  if (!folders.includes(trimmed)) {
+    writeFolders([...folders, trimmed]);
+  }
+  notify();
+  return true;
+}
+
+export function renameFolder(oldName: string, newName: string) {
+  const trimmed = newName.trim();
+  if (!trimmed || trimmed === oldName || oldName === FAVORITES) return;
+
+  writeFolders(readFolders().map((f) => (f === oldName ? trimmed : f)));
+  allSongIds().forEach((id) => {
+    const folders = readSongFolders(id);
+    if (folders.includes(oldName)) {
+      localStorage.setItem(FAV_PREFIX + id, JSON.stringify(folders.map((f) => (f === oldName ? trimmed : f))));
+    }
+  });
+  notify();
+}
+
+export function deleteFolder(name: string) {
+  if (name === FAVORITES) return;
+
+  writeFolders(readFolders().filter((f) => f !== name));
+  allSongIds().forEach((id) => {
+    const folders = readSongFolders(id);
+    if (folders.includes(name)) setSongFolderIds(id, folders.filter((f) => f !== name));
+  });
+  notify();
+}
+
+// ---------- Songs inside folders ----------
+export function readSongFolders(songId: string): string[] {
+  const stored = readJSON<unknown>(FAV_PREFIX + songId, []);
+  return Array.isArray(stored) ? stored.filter((f): f is string => typeof f === 'string') : [];
+}
+
+function setSongFolderIds(songId: string, folders: string[]) {
+  if (folders.length === 0) {
+    localStorage.removeItem(FAV_PREFIX + songId);
+    localStorage.removeItem(DATA_PREFIX + songId);
+  } else {
+    localStorage.setItem(FAV_PREFIX + songId, JSON.stringify(folders));
+  }
+}
+
+export function writeSongFolders(song: Song, folders: string[]) {
+  if (folders.length > 0) {
+    localStorage.setItem(DATA_PREFIX + song.id, JSON.stringify(song));
+  }
+  setSongFolderIds(song.id, folders);
+  notify();
+}
+
+export function removeSongFromFolder(songId: string, folder: string) {
+  setSongFolderIds(songId, readSongFolders(songId).filter((f) => f !== folder));
+  notify();
+}
+
+export function readFolderSongs(folder: string): Song[] {
+  const songs: Song[] = [];
+  allSongIds().forEach((id) => {
+    if (!readSongFolders(id).includes(folder)) return;
+    const song = readJSON<Song | null>(DATA_PREFIX + id, null);
+    if (song && song.id) songs.push(song);
+  });
+  return songs;
 }

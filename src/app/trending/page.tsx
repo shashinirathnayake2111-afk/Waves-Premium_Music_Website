@@ -1,23 +1,24 @@
 'use client';
 
-import React, { useState, useRef, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { FaFire, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import SongCard from '@/src/components/SongCard';
+import { CardSkeletons, ErrorBox } from '@/src/components/AsyncState';
+import { useAsync } from '@/src/hooks/useAsync';
+import { getTrendingTracks } from '@/src/lib/jamendo';
 
-const trendingSongs = [
-    { id: 1, rank: 1, title: 'Shape of You', artist: 'Ed Sheeran', cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80' },
-    { id: 2, rank: 2, title: 'Blinding Lights', artist: 'The Weeknd', cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80' },
-    { id: 3, rank: 3, title: 'Stay', artist: 'The Kid LAROI, Justin Bieber', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&q=80' },
-    { id: 4, rank: 4, title: 'Levitating', artist: 'Dua Lipa', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80' },
-    { id: 5, rank: 5, title: 'Bad Habits', artist: 'Ed Sheeran', cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&q=80' },
-    { id: 6, rank: 6, title: 'Save Your Tears', artist: 'The Weeknd', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500&q=80' },
-    { id: 7, rank: 7, title: 'Peaches', artist: 'Justin Bieber', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&q=80' },
-    { id: 8, rank: 8, title: 'Industry Baby', artist: 'Lil Nas X', cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80' },
+type SortKey = 'rank' | 'title' | 'artist';
+
+const sortOptions: { key: SortKey; label: string }[] = [
+    { key: 'rank', label: 'Trending rank' },
+    { key: 'title', label: 'Song title (A-Z)' },
+    { key: 'artist', label: 'Artist name (A-Z)' },
 ];
 
-function TrendingContent() {
-    const [sortBy, setSortBy] = useState<'rank' | 'title' | 'artist'>('rank');
+export default function TrendingPage() {
+    const { data: songs, loading, error, reload } = useAsync(() => getTrendingTracks(40));
+
+    const [sortBy, setSortBy] = useState<SortKey>('rank');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -27,102 +28,63 @@ function TrendingContent() {
                 setIsDropdownOpen(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const searchParams = useSearchParams();
-    const searchQuery = searchParams.get('search') || '';
+    // Rank = position in Jamendo's popularity order. Sorting never changes a song's rank.
+    const sortedSongs = useMemo(() => {
+        const ranked = (songs ?? []).map((song, i) => ({ song, rank: i + 1 }));
+        if (sortBy === 'title') return [...ranked].sort((a, b) => a.song.title.localeCompare(b.song.title));
+        if (sortBy === 'artist') return [...ranked].sort((a, b) => a.song.artist.localeCompare(b.song.artist));
+        return ranked;
+    }, [songs, sortBy]);
 
-    const filteredSongs = trendingSongs.filter((song) => {
-        const query = searchQuery.toLowerCase();
-        return (
-            song.title.toLowerCase().includes(query) ||
-            song.artist.toLowerCase().includes(query)
-        );
-    });
-
-    const sortedSongs = [...filteredSongs].sort((a, b) => {
-        if (sortBy === 'title') {
-            return a.title.localeCompare(b.title);
-        }
-        if (sortBy === 'artist') {
-            return a.artist.localeCompare(b.artist);
-        }
-        return a.rank - b.rank;
-    });
+    const queue = sortedSongs.map((item) => item.song);
+    const currentLabel = sortOptions.find((o) => o.key === sortBy)?.label;
 
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl rounded-lg p-6 m-4 text-white justify-between min-h-[calc(100vh-4rem)">
-            <div className="w-full px-3 pt-10 pb-8 text-white">
-
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-2">
-                        <FaFire className="text-orange-500 text-xl" />
-                        <h2 className="text-xl font-bold text-white">Trending Songs</h2>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm text-gray-300">
-                        <label htmlFor="sort" className="hidden sm:inline text-gray-400">Sort by:</label>
-                        <div className="relative text-xs sm:text-sm" ref={dropdownRef}>
-                            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="bg-[#1e263c] border border-white/10 text-white rounded-lg px-3 py-1.5 flex items-center gap-3 hover:border-white/20 transition cursor-pointer">
-                                <span>
-                                    {sortBy === 'rank' && 'Trending Rank'}
-                                    {sortBy === 'title' && 'Song Title (A-Z)'}
-                                    {sortBy === 'artist' && 'Artist Name (A-Z)'}
-                                </span>
-
-                                {isDropdownOpen ? (
-                                    <FaChevronUp className="text-xs text-purple-400" />
-                                ) : (
-                                    <FaChevronDown className="text-xs text-gray-400" />
-                                )}
-                            </button>
-
-                            {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl py-1 z-50 backdrop-blur-md">
-                                    <button onClick={() => { setSortBy('rank'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'rank' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}>
-                                        Trending Rank (#1)
-                                    </button>
-                                    <button onClick={() => { setSortBy('title'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'title' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}>
-                                        Song Title (A-Z)
-                                    </button>
-                                    <button onClick={() => { setSortBy('artist'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition ${sortBy === 'artist' ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}>
-                                        Artist Name (A-Z)
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 sm:p-6 m-4 mt-16 text-white">
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                    <FaFire className="text-orange-500 text-xl" />
+                    <h1 className="text-2xl font-bold">Trending songs</h1>
                 </div>
 
-                {sortedSongs.length === 0 ? (
-                    <div className="text-center py-12 text-gray-400">
-                        No results found matching &quot;{searchQuery}&quot; 🔍
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-                        {sortedSongs.map((song) => (
-                            <SongCard key={song.id} song={song} />
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
-    )
-}
+                <div className="flex items-center gap-2 text-sm text-gray-300">
+                    <span className="hidden sm:inline text-gray-400">Sort by:</span>
+                    <div className="relative text-xs sm:text-sm" ref={dropdownRef}>
+                        <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} aria-haspopup="listbox" aria-expanded={isDropdownOpen}
+                            className="bg-[#1e263c] border border-white/10 text-white rounded-lg px-3 py-1.5 flex items-center gap-3 hover:border-white/20 transition cursor-pointer">
+                            <span>{currentLabel}</span>
+                            {isDropdownOpen ? <FaChevronUp className="text-xs text-purple-400" /> : <FaChevronDown className="text-xs text-gray-400" />}
+                        </button>
 
-export default function TrendingPage() {
-    return (
-        <Suspense fallback={<div className="text-white p-6">Loading Trending Songs...</div>}>
-            <TrendingContent />
-        </Suspense>
-    )
+                        {isDropdownOpen && (
+                            <div role="listbox" className="absolute right-0 mt-2 w-48 bg-[#1e263c] border border-white/10 rounded-xl shadow-2xl py-1 z-50 backdrop-blur-md">
+                                {sortOptions.map((option) => (
+                                    <button key={option.key} role="option" aria-selected={sortBy === option.key}
+                                        onClick={() => { setSortBy(option.key); setIsDropdownOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-xs sm:text-sm hover:bg-white/10 transition cursor-pointer ${sortBy === option.key ? 'text-purple-400 font-semibold bg-white/5' : 'text-gray-300'}`}>
+                                        {option.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {loading && <CardSkeletons count={8} />}
+            {error && <ErrorBox message={`Couldn't load trending songs. ${error}`} onRetry={reload} />}
+
+            {songs && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                    {sortedSongs.map(({ song, rank }) => (
+                        <SongCard key={song.id} song={song} queue={queue} rank={rank} />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 }

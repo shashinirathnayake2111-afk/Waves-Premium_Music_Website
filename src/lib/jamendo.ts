@@ -123,3 +123,30 @@ export async function getPopularAlbums(limit = 10): Promise<Album[]> {
   });
   return albums.map(mapAlbum);
 }
+
+export async function getArtistTracks(artistId: string, limit = 20): Promise<Song[]> {
+  const tracks = await request<JamendoTrack>('/tracks/', {
+    ...TRACK_PARAMS,
+    artist_id: artistId,
+    order: 'popularity_total',
+    limit,
+  });
+  return tracks.map(mapTrack);
+}
+
+export async function getAlbumTracks(albumId: string, limit = 50): Promise<Song[]> {
+  const tracks = await request<JamendoTrack>('/tracks/', {
+    ...TRACK_PARAMS,
+    album_id: albumId,
+    limit,
+  });
+  return tracks.map(mapTrack);
+}
+
+export async function searchArtists(query: string, limit = 8): Promise<Artist[]> {
+  const artists = await request<JamendoArtist>('/artists/', {
+    namesearch: query,
+    limit,
+  });
+  return artists.map(mapArtist);
+}

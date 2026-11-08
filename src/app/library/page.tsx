@@ -3,12 +3,13 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { FaArrowLeft, FaHeart, FaList, FaBook, FaPause, FaPlay, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaHeart, FaList, FaMusic, FaPause, FaPlay, FaPlus, FaTimes } from 'react-icons/fa';
 import { useModal } from '@/src/context/ModalContext';
-import { useMusic, Song } from '@/src/context/MusicContext';
+import { useMusic } from '@/src/context/MusicContext';
+import type { Song } from '@/src/types/music';
 import {
-    CatalogSong,
     FAVORITES,
+    onLibraryChange,
     readFolders,
     readFolderSongs,
     removeSongFromFolder,
@@ -16,18 +17,11 @@ import {
 
 interface Playlist {
     name: string;
-    songs: CatalogSong[];
+    songs: Song[];
 }
 
-const toPlayerSong = (s: CatalogSong): Song => ({
-    id: String(s.id),
-    title: s.title,
-    artist: s.artist,
-    coverImage: s.cover,
-});
-
 function SongRow({ song, isCurrent, isPlaying, onPlay, onRemove, removeLabel }: {
-    song: CatalogSong;
+    song: Song;
     isCurrent: boolean;
     isPlaying: boolean;
     onPlay: () => void;
@@ -38,7 +32,7 @@ function SongRow({ song, isCurrent, isPlaying, onPlay, onRemove, removeLabel }: 
 
     return (
         <li className={`flex items-center gap-3 p-2 pr-3 rounded-xl transition ${isCurrent ? 'bg-purple-600/15' : 'hover:bg-white/10'}`}>
-            <img src={song.cover} alt="" className="shrink-0 w-14 h-14 rounded-lg object-cover bg-slate-800" />
+            <img src={song.coverImage} alt="" className="shrink-0 w-14 h-14 rounded-lg object-cover bg-slate-800" />
 
             <div className="flex-1 min-w-0">
                 <p className={`font-semibold truncate ${isCurrent ? 'text-purple-300' : 'text-white'}`}>{song.title}</p>
@@ -92,6 +86,7 @@ function LibraryContent() {
 
     useEffect(() => {
         load();
+        return onLibraryChange(load);
     }, []);
 
     const selectedName = searchParams.get('playlist');
@@ -101,23 +96,21 @@ function LibraryContent() {
     const custom = playlists.filter((p) => p.name !== FAVORITES);
     const selected = selectedName ? playlists.find((p) => p.name === selectedName) : undefined;
 
-    const playAll = (songs: CatalogSong[]) => {
+    const playAll = (songs: Song[]) => {
         if (songs.length === 0) return;
-        const queue = songs.map(toPlayerSong);
-        playSong(queue[0], queue);
+        playSong(songs[0], songs);
     };
 
-    const playOne = (songs: CatalogSong[], index: number) => {
+    const playOne = (songs: Song[], index: number) => {
         const song = songs[index];
-        if (currentSong?.id === String(song.id)) {
+        if (currentSong?.id === song.id) {
             togglePlay();
             return;
         }
-        const queue = songs.map(toPlayerSong);
-        playSong(queue[index], queue);
+        playSong(song, songs);
     };
 
-    const remove = (songId: number, folder: string) => {
+    const remove = (songId: string, folder: string) => {
         removeSongFromFolder(songId, folder);
         load();
     };
@@ -125,11 +118,11 @@ function LibraryContent() {
     const tabClass = (active: boolean) =>
         `px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-purple-400 ${active ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`;
 
-    const renderSongList = (name: string, songs: CatalogSong[]) => (
+    const renderSongList = (name: string, songs: Song[]) => (
         <ul className="space-y-1">
             {songs.map((song, i) => (
                 <SongRow key={song.id} song={song}
-                    isCurrent={currentSong?.id === String(song.id)}
+                    isCurrent={currentSong?.id === song.id}
                     isPlaying={isPlaying}
                     onPlay={() => playOne(songs, i)}
                     onRemove={() => remove(song.id, name)}
@@ -178,7 +171,7 @@ function LibraryContent() {
                         </div>
 
                         {songs.length === 0 ? (
-                            <EmptyState icon={<FaBook />} title="No songs here yet"
+                            <EmptyState icon={<FaMusic />} title="No songs here yet"
                                 hint="Tap the heart on any song and pick this playlist to add it." />
                         ) : renderSongList(selectedName, songs)}
                     </>
@@ -187,11 +180,12 @@ function LibraryContent() {
         );
     }
 
+    /* ---------- Main library view ---------- */
     return (
-        <div className="flex-1 bg-white/5 backdrop-blur-xl rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
+        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 sm:p-6 m-4 text-white mt-16">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <h2 className="text-xl font-bold flex items-center gap-3">
-                    <FaBook className="text-purple-400" /> My library
+                    <FaMusic className="text-purple-400" /> Your library
                 </h2>
 
                 <nav className="flex gap-2" aria-label="Library sections">
@@ -247,9 +241,9 @@ function LibraryContent() {
                                         className="block bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 hover:border-white/20 transition focus-visible:outline-2 focus-visible:outline-purple-400">
                                         <div className="w-full h-36 rounded-lg mb-3 overflow-hidden bg-linear-to-br from-indigo-600/40 to-pink-600/40 grid place-items-center">
                                             {playlist.songs[0] ? (
-                                                <img src={playlist.songs[0].cover} alt="" className="w-full h-full object-cover" />
+                                                <img src={playlist.songs[0].coverImage} alt="" className="w-full h-full object-cover" />
                                             ) : (
-                                                <FaBook className="text-3xl text-white/60" />
+                                                <FaMusic className="text-3xl text-white/60" />
                                             )}
                                         </div>
                                         <h4 className="font-semibold text-white truncate">{playlist.name}</h4>
